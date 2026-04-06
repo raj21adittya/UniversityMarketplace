@@ -18,7 +18,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     const isRootPage = pathname === "/";
 
     if (!user) {
-      if (!isAuthPage && !isRootPage) router.replace("/login");
+      if (!isAuthPage) router.replace("/login");
     } else if (!profile || !profile.displayName) {
       if (!isSetupPage) router.replace("/setup");
     } else {
