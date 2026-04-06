@@ -37,6 +37,7 @@ firebase-debug.log
 
 # Firebase config (contains API keys)
 GoogleService-Info.plist
+firebase-hosting/public/signin/config.js
 
 # Misc
 *.log

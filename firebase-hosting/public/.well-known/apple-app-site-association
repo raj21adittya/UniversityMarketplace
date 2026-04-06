@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["6T6ST4883J.river.UniversityMarketplace"],
+        "paths": ["/signin", "/signin/*", "/appauth", "/appauth/*", "/__/auth/*"]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["6T6ST4883J.river.UniversityMarketplace"]
+  }
+}

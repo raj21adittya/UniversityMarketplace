@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNC Marketplace - Sign In</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 48px 36px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .logo {
+            width: 80px; height: 80px;
+            background: #4B9CD3;
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 36px;
+        }
+        h1 { font-size: 24px; color: #13294B; margin-bottom: 8px; }
+        .subtitle { color: #6b7280; font-size: 15px; margin-bottom: 32px; line-height: 1.5; }
+        .status {
+            padding: 16px; border-radius: 12px;
+            margin-bottom: 24px; font-size: 15px; line-height: 1.5;
+        }
+        .status.loading { background: #EBF5FF; color: #1E40AF; }
+        .status.success { background: #ECFDF5; color: #065F46; }
+        .status.error { background: #FEF2F2; color: #991B1B; }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 3px solid #e5e7eb; border-top-color: #4B9CD3;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .checkmark { font-size: 48px; margin-bottom: 16px; }
+        .app-link {
+            display: inline-block;
+            background: #4B9CD3; color: white;
+            padding: 14px 32px; border-radius: 12px;
+            text-decoration: none; font-weight: 600; font-size: 16px;
+            transition: background 0.2s; margin-top: 16px;
+        }
+        .app-link:hover { background: #3a8bc2; }
+        .hint { color: #9ca3af; font-size: 13px; margin-top: 16px; line-height: 1.5; }
+        .email { font-weight: 600; color: #4B9CD3; }
+        .or-divider {
+            color: #9ca3af; font-size: 13px; margin: 20px 0;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .or-divider::before, .or-divider::after {
+            content: ''; flex: 1; height: 1px; background: #e5e7eb;
+        }
+        .qr-hint { color: #6b7280; font-size: 14px; margin-top: 12px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">🏛️</div>
+        <h1>UNC Marketplace</h1>
+        <p class="subtitle">Signing you in securely...</p>
+
+        <div id="loading">
+            <div class="spinner"></div>
+            <div class="status loading">Verifying your sign-in link...</div>
+        </div>
+
+        <div id="success" style="display:none;">
+            <div class="checkmark">✅</div>
+            <div class="status success">
+                Signed in as<br><span id="user-email" class="email"></span>
+            </div>
+            <a id="open-app-link" class="app-link" href="#">Open UNC Marketplace App</a>
+            <div class="or-divider">or</div>
+            <p class="qr-hint">If you're on a laptop, open the app on your iPhone — you'll be signed in automatically.</p>
+        </div>
+
+        <div id="error" style="display:none;">
+            <div class="checkmark">⚠️</div>
+            <div class="status error" id="error-message">Something went wrong.</div>
+            <p class="hint">Try opening the sign-in link on your iPhone directly,<br>or request a new sign-in link from the app.</p>
+        </div>
+    </div>
+
+    <script src="/signin/config.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+        import { getAuth, isSignInWithEmailLink, signInWithEmailLink } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
+        import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-functions.js';
+
+        const firebaseConfig = window.__UM_FIREBASE_CONFIG__;
+
+        if (!firebaseConfig) {
+            showState('error', 'Missing Firebase web config. Add /signin/config.js before deploying this page.');
+            throw new Error('Missing /signin/config.js Firebase config');
+        }
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const functions = getFunctions(app);
+
+        function showState(state, message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('success').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById(state).style.display = 'block';
+            if (state === 'error') {
+                document.getElementById('error-message').textContent = message || 'Something went wrong.';
+            }
+        }
+
+        async function handleSignIn() {
+            const link = window.location.href;
+
+            if (!isSignInWithEmailLink(auth, link)) {
+                showState('error', 'This link is not a valid sign-in link. It may have expired.');
+                return;
+            }
+
+            let email = window.localStorage.getItem('emailForSignIn');
+            if (!email) {
+                email = window.prompt('Please enter your UNC email to confirm sign-in:');
+            }
+            if (!email) {
+                showState('error', 'Email is required to complete sign-in.');
+                return;
+            }
+
+            try {
+                // Step 1: Sign in on the web
+                const result = await signInWithEmailLink(auth, email, link);
+                window.localStorage.removeItem('emailForSignIn');
+                document.getElementById('user-email').textContent = result.user.email;
+
+                // Step 2: Get a custom token for the iOS app
+                const getCustomToken = httpsCallable(functions, 'getCustomToken');
+                const tokenResult = await getCustomToken();
+                const customToken = tokenResult.data.token;
+
+                // Step 3: Build the Universal Link for the iOS app
+                const appLink = `https://university-marketplace-b46b3.web.app/appauth?token=${encodeURIComponent(customToken)}&email=${encodeURIComponent(result.user.email)}`;
+                document.getElementById('open-app-link').href = appLink;
+
+                showState('success');
+
+                // On mobile, try to auto-open the app
+                if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    window.location.href = appLink;
+                }
+            } catch (err) {
+                console.error('Sign-in error:', err);
+                if (err.code === 'auth/invalid-action-code') {
+                    showState('error', 'This sign-in link has expired or already been used. Request a new one from the app.');
+                } else if (err.code === 'auth/invalid-email') {
+                    showState('error', 'The email address doesn\'t match. Please try again.');
+                } else {
+                    showState('error', err.message);
+                }
+            }
+        }
+
+        handleSignIn();
+    </script>
+</body>
+</html>
