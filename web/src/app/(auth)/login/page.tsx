@@ -22,7 +22,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-5 md:px-8">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🏛️</div>

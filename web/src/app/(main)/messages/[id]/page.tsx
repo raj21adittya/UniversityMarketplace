@@ -108,7 +108,7 @@ export default function ChatPage() {
   const otherName = conversation.participantNames[otherId] ?? "User";
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem)] md:max-w-2xl md:mx-auto">
+    <div className="flex flex-col h-[calc(100vh-3.5rem)] px-3 md:max-w-2xl md:mx-auto md:px-8">
       {/* Header */}
       <div className="border-b px-4 py-3 flex items-center gap-3 bg-white shrink-0">
         <div>

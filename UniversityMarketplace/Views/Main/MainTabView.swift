@@ -4,6 +4,16 @@ struct MainTabView: View {
     @State private var selectedTab = 0
     @State private var showCreateListing = false
 
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor.white.withAlphaComponent(0.96)
+        appearance.shadowColor = UIColor(Color.carolinaStroke)
+
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
+
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Home", systemImage: "house.fill", value: 0) {
@@ -36,6 +46,8 @@ struct MainTabView: View {
             }
         }
         .tint(Color.carolinaBlue)
+        .toolbarBackground(Color.white, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
         .fullScreenCover(isPresented: $showCreateListing) {
             selectedTab = 0
         } content: {

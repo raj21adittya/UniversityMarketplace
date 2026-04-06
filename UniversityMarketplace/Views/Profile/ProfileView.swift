@@ -15,12 +15,10 @@ struct ProfileView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Profile Header
                 if let user = authViewModel.currentUserProfile {
                     profileHeader(user: user)
                 }
 
-                // Quick Actions
                 VStack(spacing: 0) {
                     NavigationLink {
                         SavedItemsView()
@@ -36,21 +34,20 @@ struct ProfileView: View {
                         profileRow(icon: "pencil.circle.fill", title: "Edit Profile", color: Color.carolinaBlue)
                     }
                 }
-                .background(Color(.systemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .padding(.horizontal)
+                .padding(4)
+                .brandPanel(radius: 24)
+                .padding(.horizontal, 20)
 
-                // Active Listings
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("Active Listings")
-                            .font(.headline)
+                            .font(.system(.title3, design: .serif).weight(.semibold))
                         Spacer()
                         Text("\(viewModel.activeListings.count) items")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.carolinaMuted)
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, 20)
 
                     if viewModel.activeListings.isEmpty {
                         EmptyStateView(
@@ -67,22 +64,21 @@ struct ProfileView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.horizontal, 20)
                     }
                 }
 
-                // Sold Listings
                 if !viewModel.soldListings.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("Sold")
-                                .font(.headline)
+                                .font(.system(.title3, design: .serif).weight(.semibold))
                             Spacer()
                             Text("\(viewModel.soldListings.count) items")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.carolinaMuted)
                         }
-                        .padding(.horizontal)
+                        .padding(.horizontal, 20)
 
                         LazyVGrid(columns: columns, spacing: 12) {
                             ForEach(viewModel.soldListings) { listing in
@@ -102,24 +98,24 @@ struct ProfileView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.horizontal, 20)
                     }
                 }
 
-                // Sign Out
                 Button(role: .destructive) {
                     showSignOutConfirmation = true
                 } label: {
                     Text("Sign Out")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 12))
+                        .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 20)
                 .padding(.bottom, 32)
             }
+            .padding(.top, 16)
         }
-        .background(Color.backgroundPrimary)
+        .brandScreenBackground()
         .navigationTitle("Profile")
         .navigationDestination(for: Listing.self) { listing in
             ListingDetailView(listing: listing)
@@ -148,9 +144,15 @@ struct ProfileView: View {
 
     private func profileHeader(user: UMUser) -> some View {
         VStack(spacing: 12) {
+            Text("PROFILE")
+                .font(.system(.caption, design: .rounded).weight(.bold))
+                .tracking(2.2)
+                .foregroundStyle(Color.carolinaMuted)
+
             if let imageURL = user.profileImageURL {
                 CachedImageView(url: imageURL, size: 80)
                     .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.white, lineWidth: 3))
             } else {
                 Image(systemName: "person.circle.fill")
                     .font(.system(size: 80))
@@ -160,13 +162,13 @@ struct ProfileView: View {
             VStack(spacing: 4) {
                 HStack(spacing: 4) {
                     Text(user.displayName)
-                        .font(.title3.bold())
+                        .font(.system(.title2, design: .serif).weight(.semibold))
                     VerifiedBadge(size: 16)
                 }
 
                 Text("\(user.housingArea) · Class of \(user.graduationYear)")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.carolinaMuted)
 
                 if user.averageRating > 0 {
                     HStack(spacing: 4) {
@@ -174,13 +176,12 @@ struct ProfileView: View {
                             .foregroundStyle(.orange)
                         Text(String(format: "%.1f", user.averageRating))
                         Text("(\(user.reviewCount) reviews)")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.carolinaMuted)
                     }
                     .font(.caption)
                 }
             }
 
-            // Stats
             HStack(spacing: 32) {
                 statItem(value: "\(user.listingCount)", label: "Listed")
                 statItem(value: String(format: "%.1f", user.averageRating), label: "Rating")
@@ -188,17 +189,20 @@ struct ProfileView: View {
             }
             .padding(.top, 4)
         }
-        .padding()
+        .padding(20)
+        .brandPanel(radius: 30)
+        .padding(.horizontal, 20)
     }
 
     private func statItem(value: String, label: String) -> some View {
         VStack(spacing: 2) {
             Text(value)
-                .font(.headline)
+                .font(.system(.title3, design: .rounded).weight(.heavy))
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.carolinaMuted)
         }
+        .frame(maxWidth: .infinity)
     }
 
     private func profileRow(icon: String, title: String, color: Color) -> some View {

@@ -1,26 +1,93 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5f7fb;
+  --foreground: #16324f;
+  --surface: #ffffff;
+  --surface-muted: #eef4f9;
+  --border: #d7e4f0;
+  --brand: #4b9cd3;
+  --brand-deep: #1f4f7a;
+  --brand-soft: #dcedfa;
+  --text-muted: #58708a;
+  color-scheme: light;
+}
+
+html,
+body {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top, rgba(75, 156, 211, 0.18), transparent 28%),
+    linear-gradient(180deg, #f4f8fc 0%, #edf3f8 100%) !important;
+  color: var(--foreground) !important;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-fraunces);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-manrope), sans-serif;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+::selection {
+  background: rgba(75, 156, 211, 0.24);
+}
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .shell {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(215, 228, 240, 0.95);
+  box-shadow:
+    0 10px 30px rgba(30, 58, 95, 0.06),
+    0 2px 10px rgba(30, 58, 95, 0.04);
+  backdrop-filter: blur(16px);
+}
+
+.font-display {
+  font-family: var(--font-fraunces), serif;
+}
+
+.text-muted {
+  color: var(--text-muted);
 }

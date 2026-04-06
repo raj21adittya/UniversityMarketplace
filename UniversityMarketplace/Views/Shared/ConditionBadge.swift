@@ -5,11 +5,15 @@ struct ConditionBadge: View {
 
     var body: some View {
         Text(condition.displayName)
-            .font(.caption2.bold())
-            .foregroundStyle(.white)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(Color(hex: condition.color), in: Capsule())
+            .font(.system(.caption2, design: .rounded).weight(.bold))
+            .foregroundStyle(Color.carolinaNavy)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.white.opacity(0.92), in: Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(Color.carolinaStroke.opacity(0.9), lineWidth: 1)
+            )
     }
 }
 

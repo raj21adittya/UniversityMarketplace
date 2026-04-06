@@ -45,7 +45,7 @@ export default function MessagesPage() {
   if (loading) return <div className="text-center py-16 text-gray-400">Loading...</div>;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 pt-4 pb-24 md:pt-18">
+    <div className="max-w-2xl mx-auto px-5 pt-4 pb-24 md:px-8 md:pt-18">
       <h1 className="text-2xl font-bold text-[#13294B] mb-4">Messages</h1>
 
       {conversations.length === 0 ? (

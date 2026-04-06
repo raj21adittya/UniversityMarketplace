@@ -55,7 +55,7 @@ export default function SetupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-5 md:px-8">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h1 className="text-xl font-bold text-center mb-6">Complete Your Profile</h1>
 

@@ -56,31 +56,38 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-4 pb-24 md:pt-18">
-      <h1 className="text-2xl font-bold text-[#13294B] mb-4">Search</h1>
+    <div className="shell pb-28 pt-4 md:pt-24">
+      <div className="panel rounded-[32px] p-5 md:p-7">
+        <div className="mb-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6C849A]">Smart browse</p>
+          <h1 className="font-display text-4xl text-[#16324F]">Search the marketplace</h1>
+          <p className="mt-2 text-sm text-[#58708A]">
+            Narrow listings by category, condition, and where students are meeting.
+          </p>
+        </div>
 
-      <form onSubmit={handleSearch} className="mb-4">
-        <div className="flex gap-2">
+        <form onSubmit={handleSearch} className="mb-2">
+        <div className="flex gap-3">
           <input
             type="text"
             placeholder="Search listings..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4B9CD3]"
+            className="flex-1 rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm text-[#16324F] outline-none focus:border-[#4B9CD3] focus:ring-4 focus:ring-[#DCEBFA]"
           />
           <button
             type="submit"
-            className="bg-[#4B9CD3] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#3a8bc2] transition-colors"
+            className="rounded-2xl bg-[#4B9CD3] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(75,156,211,0.22)] hover:bg-[#3a8bc2]"
           >
             Search
           </button>
         </div>
 
-        <div className="flex gap-2 mt-3 flex-wrap">
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm text-[#16324F] outline-none"
           >
             <option value="">All Categories</option>
             {CATEGORIES.map((c) => (
@@ -92,7 +99,7 @@ export default function SearchPage() {
           <select
             value={condition}
             onChange={(e) => setCondition(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm text-[#16324F] outline-none"
           >
             <option value="">Any Condition</option>
             {CONDITIONS.map((c) => (
@@ -102,7 +109,7 @@ export default function SearchPage() {
           <select
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm text-[#16324F] outline-none"
           >
             <option value="">All Locations</option>
             {LOCATIONS.map((l) => (
@@ -110,18 +117,22 @@ export default function SearchPage() {
             ))}
           </select>
         </div>
-      </form>
+        </form>
+      </div>
 
+      <div className="mt-6">
       {loading ? (
-        <div className="text-center py-16 text-gray-400">Searching...</div>
+        <div className="panel rounded-[28px] py-16 text-center text-[#6C849A]">Searching...</div>
       ) : searched ? (
         <ListingGrid listings={results} />
       ) : (
-        <div className="text-center py-16 text-gray-400">
-          <p className="text-4xl mb-3">🔍</p>
-          <p>Search for items</p>
+        <div className="panel rounded-[28px] py-16 text-center text-[#58708A]">
+          <p className="mb-3 text-4xl">🔍</p>
+          <p className="font-display text-2xl text-[#16324F]">Search for items</p>
+          <p className="mt-2 text-sm">Start with a keyword or browse by category and location.</p>
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
 });
 
@@ -19,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-[family-name:var(--font-geist-sans)]">
+    <html lang="en" className={`${manrope.variable} ${fraunces.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col font-[family-name:var(--font-manrope)]">
         <Providers>{children}</Providers>
       </body>
     </html>

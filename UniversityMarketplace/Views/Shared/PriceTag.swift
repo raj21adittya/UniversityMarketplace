@@ -5,7 +5,7 @@ struct PriceTag: View {
 
     var body: some View {
         Text("$\(price, specifier: "%.0f")")
-            .font(.headline.bold())
-            .foregroundStyle(Color.carolinaDark)
+            .font(.system(.title3, design: .rounded).weight(.heavy))
+            .foregroundStyle(Color.carolinaBlue)
     }
 }

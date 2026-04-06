@@ -19,16 +19,15 @@ struct ListingDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                // Image Carousel
+            VStack(alignment: .leading, spacing: 20) {
                 TabView(selection: $currentImageIndex) {
                     if listing.imageURLs.isEmpty {
                         Rectangle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.carolinaFog)
                             .overlay {
                                 Image(systemName: "photo")
                                     .font(.largeTitle)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.carolinaMuted)
                             }
                             .tag(0)
                     } else {
@@ -40,19 +39,26 @@ struct ListingDetailView: View {
                 }
                 .frame(height: 300)
                 .tabViewStyle(.page(indexDisplayMode: .automatic))
+                .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .padding(.horizontal, 20)
 
-                VStack(alignment: .leading, spacing: 12) {
-                    // Title & Price
+                VStack(alignment: .leading, spacing: 16) {
                     HStack(alignment: .top) {
                         VStack(alignment: .leading, spacing: 4) {
+                            Text("LISTING DETAILS")
+                                .font(.system(.caption, design: .rounded).weight(.bold))
+                                .tracking(2)
+                                .foregroundStyle(Color.carolinaMuted)
+
                             Text(listing.title)
-                                .font(.title2.bold())
+                                .font(.system(.largeTitle, design: .serif).weight(.semibold))
+                                .foregroundStyle(Color.carolinaInk)
 
                             HStack(spacing: 8) {
                                 ConditionBadge(condition: listing.condition)
                                 Text(listing.locationTag.displayName)
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.carolinaMuted)
                             }
                         }
 
@@ -60,7 +66,7 @@ struct ListingDetailView: View {
 
                         VStack(alignment: .trailing, spacing: 4) {
                             Text("$\(listing.price, specifier: "%.0f")")
-                                .font(.title.bold())
+                                .font(.system(.title, design: .rounded).weight(.heavy))
                                 .foregroundStyle(Color.carolinaBlue)
 
                             if listing.isSold {
@@ -74,24 +80,20 @@ struct ListingDetailView: View {
                         }
                     }
 
-                    Divider()
-
-                    // Description
                     Text(listing.description)
                         .font(.body)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.carolinaMuted)
+                        .lineSpacing(4)
 
-                    Divider()
-
-                    // Seller Info
                     HStack(spacing: 12) {
                         if let imageURL = listing.sellerImageURL {
                             CachedImageView(url: imageURL, size: 44)
                                 .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
                         } else {
                             Image(systemName: "person.circle.fill")
                                 .font(.system(size: 44))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.carolinaMuted)
                         }
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -104,7 +106,7 @@ struct ListingDetailView: View {
                             if let seller = viewModel.sellerProfile {
                                 Text("\(seller.housingArea) · Class of \(seller.graduationYear)")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.carolinaMuted)
                             }
 
                             if listing.sellerRating > 0 {
@@ -114,7 +116,7 @@ struct ListingDetailView: View {
                                         .foregroundStyle(.orange)
                                     Text(String(format: "%.1f", listing.sellerRating))
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Color.carolinaMuted)
                                 }
                             }
                         }
@@ -122,21 +124,24 @@ struct ListingDetailView: View {
                         Spacer()
                     }
                     .padding()
-                    .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 12))
+                    .background(Color.carolinaFog, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
 
-                    // Stats
                     HStack(spacing: 20) {
                         Label("\(listing.viewCount) views", systemImage: "eye")
                         Label("\(listing.savedCount) saved", systemImage: "heart")
                         Label(listing.createdAt.timeAgoDisplay, systemImage: "clock")
                     }
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.carolinaMuted)
                 }
-                .padding(.horizontal)
+                .padding(20)
+                .brandPanel(radius: 30)
+                .padding(.horizontal, 20)
             }
+            .padding(.top, 16)
+            .padding(.bottom, 28)
         }
-        .background(Color.backgroundPrimary)
+        .brandScreenBackground()
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -183,7 +188,7 @@ struct ListingDetailView: View {
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.carolinaBlue, in: RoundedRectangle(cornerRadius: 14))
+                            .background(Color.carolinaBlue, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                     }
                 } else {
                     Button {
@@ -200,13 +205,13 @@ struct ListingDetailView: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.carolinaBlue, in: RoundedRectangle(cornerRadius: 14))
+                        .background(Color.carolinaBlue, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                     }
                     .disabled(isStartingChat)
                 }
             }
-            .padding(.horizontal)
-            .padding(.bottom, 8)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 10)
         }
         .background(.ultraThinMaterial)
     }

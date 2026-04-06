@@ -5,52 +5,83 @@ struct ListingCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            CachedImageView(url: listing.imageURLs.first)
-                .frame(maxWidth: .infinity)
-                .frame(height: 150)
-                .clipped()
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay(alignment: .topTrailing) {
-                    ConditionBadge(condition: listing.condition)
-                        .padding(6)
-                }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(listing.title)
-                    .font(.subheadline.bold())
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .foregroundStyle(.primary)
-
-                PriceTag(price: listing.price)
-
-                HStack(spacing: 4) {
-                    if let imageURL = listing.sellerImageURL {
-                        CachedImageView(url: imageURL, size: 16)
-                            .clipShape(Circle())
-                    } else {
-                        Image(systemName: "person.circle.fill")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+            ZStack(alignment: .topLeading) {
+                CachedImageView(url: listing.imageURLs.first)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 160)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    .overlay {
+                        LinearGradient(
+                            colors: [Color.carolinaNavy.opacity(0.22), .clear],
+                            startPoint: .top,
+                            endPoint: .center
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                     }
 
-                    Text(listing.sellerName)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                HStack {
+                    ConditionBadge(condition: listing.condition)
+                    Spacer()
+                    Text(listing.createdAt.timeAgoDisplay)
+                        .font(.system(.caption2, design: .rounded).weight(.bold))
+                        .foregroundStyle(.white.opacity(0.92))
+                }
+                .padding(10)
+            }
 
-                    VerifiedBadge(size: 10)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .top, spacing: 8) {
+                    Text(listing.title)
+                        .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                        .foregroundStyle(Color.carolinaInk)
+
+                    Spacer(minLength: 0)
+
+                    PriceTag(price: listing.price)
                 }
 
-                Text(listing.createdAt.timeAgoDisplay)
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                HStack(spacing: 8) {
+                    if let imageURL = listing.sellerImageURL {
+                        CachedImageView(url: imageURL, size: 24)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(Color.white, lineWidth: 1.5))
+                    } else {
+                        Circle()
+                            .fill(Color.carolinaStroke)
+                            .frame(width: 24, height: 24)
+                            .overlay(
+                                Image(systemName: "person.fill")
+                                    .font(.caption2)
+                                    .foregroundStyle(Color.carolinaMuted)
+                            )
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(listing.sellerName)
+                            .font(.caption.bold())
+                            .foregroundStyle(Color.carolinaInk)
+                            .lineLimit(1)
+
+                        Text("Campus seller")
+                            .font(.caption2)
+                            .foregroundStyle(Color.carolinaMuted)
+                    }
+
+                    Spacer()
+
+                    VerifiedBadge(size: 12)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .background(Color.carolinaFog, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
         }
-        .padding(8)
+        .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
+        .brandPanel(radius: 26)
         .contentShape(Rectangle())
     }
 }

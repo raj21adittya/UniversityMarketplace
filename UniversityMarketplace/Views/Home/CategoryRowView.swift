@@ -25,7 +25,7 @@ struct CategoryRowView: View {
                     }
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
             .padding(.vertical, 8)
         }
     }
@@ -41,17 +41,22 @@ struct CategoryChip: View {
         Button(action: action) {
             HStack(spacing: 6) {
                 Image(systemName: icon)
-                    .font(.caption)
+                    .font(.caption.weight(.semibold))
                 Text(title)
-                    .font(.caption.bold())
+                    .font(.system(.caption, design: .rounded).weight(.bold))
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
             .background(
-                isSelected ? Color.carolinaBlue : Color(.systemGray6),
+                isSelected ? Color.carolinaBlue : Color.white.opacity(0.82),
                 in: Capsule()
             )
-            .foregroundStyle(isSelected ? .white : .primary)
+            .overlay(
+                Capsule()
+                    .stroke(isSelected ? Color.clear : Color.carolinaStroke.opacity(0.95), lineWidth: 1)
+            )
+            .shadow(color: isSelected ? Color.carolinaBlue.opacity(0.18) : Color.clear, radius: 10, y: 6)
+            .foregroundStyle(isSelected ? .white : Color.carolinaMuted)
         }
     }
 }

@@ -91,29 +91,35 @@ export default function SellPage() {
   const isValid = title && description && price > 0 && images.length > 0;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 pt-4 pb-24 md:pt-18">
-      <h1 className="text-2xl font-bold text-[#13294B] mb-4">Create Listing</h1>
+    <div className="shell pb-28 pt-4 md:pt-24">
+      <div className="panel rounded-[34px] p-5 md:p-8">
+      <div className="mb-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6C849A]">Sell on campus</p>
+        <h1 className="font-display text-4xl text-[#16324F]">Create a polished listing</h1>
+        <p className="mt-2 text-sm text-[#58708A]">
+          Strong photos, a clean title, and a confident price help your listing feel trustworthy.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Photos */}
         <div>
-          <label className="block text-sm font-medium mb-2">Photos (up to 5)</label>
+          <label className="mb-2 block text-sm font-semibold text-[#16324F]">Photos (up to 5)</label>
           <div className="flex gap-2 flex-wrap">
             {previews.map((url, i) => (
-              <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden">
+              <div key={i} className="relative h-24 w-24 overflow-hidden rounded-[20px]">
                 <Image src={url} alt="" fill className="object-cover" />
                 <button
                   type="button"
                   onClick={() => removeImage(i)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+                  className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white"
                 >
                   ×
                 </button>
               </div>
             ))}
             {images.length < 5 && (
-              <label className="w-24 h-24 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:border-[#4B9CD3] transition-colors">
-                <span className="text-2xl text-gray-400">+</span>
+              <label className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-[20px] border-2 border-dashed border-[#BFD4E4] bg-white text-[#7A92A8] hover:border-[#4B9CD3] hover:text-[#4B9CD3]">
+                <span className="text-2xl">+</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -127,46 +133,46 @@ export default function SellPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Title</label>
+          <label className="mb-1 block text-sm font-semibold text-[#16324F]">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4B9CD3]"
+            className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm outline-none focus:border-[#4B9CD3] focus:ring-4 focus:ring-[#DCEBFA]"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Description</label>
+          <label className="mb-1 block text-sm font-semibold text-[#16324F]">Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
-            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4B9CD3]"
+            className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm outline-none focus:border-[#4B9CD3] focus:ring-4 focus:ring-[#DCEBFA]"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Price ($)</label>
+          <label className="mb-1 block text-sm font-semibold text-[#16324F]">Price ($)</label>
           <input
             type="number"
             step="0.01"
             value={priceText}
             onChange={(e) => setPriceText(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4B9CD3]"
+            className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm outline-none focus:border-[#4B9CD3] focus:ring-4 focus:ring-[#DCEBFA]"
             required
           />
         </div>
 
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-sm font-medium mb-1">Category</label>
+            <label className="mb-1 block text-sm font-semibold text-[#16324F]">Category</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm"
+              className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-3 py-3 text-sm outline-none"
             >
               {CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>{c.label}</option>
@@ -174,11 +180,11 @@ export default function SellPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Condition</label>
+            <label className="mb-1 block text-sm font-semibold text-[#16324F]">Condition</label>
             <select
               value={condition}
               onChange={(e) => setCondition(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm"
+              className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-3 py-3 text-sm outline-none"
             >
               {CONDITIONS.map((c) => (
                 <option key={c.value} value={c.value}>{c.label}</option>
@@ -186,11 +192,11 @@ export default function SellPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Location</label>
+            <label className="mb-1 block text-sm font-semibold text-[#16324F]">Location</label>
             <select
               value={locationTag}
               onChange={(e) => setLocationTag(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm"
+              className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-3 py-3 text-sm outline-none"
             >
               {LOCATIONS.map((l) => (
                 <option key={l.value} value={l.value}>{l.label}</option>
@@ -199,16 +205,17 @@ export default function SellPage() {
           </div>
         </div>
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-sm text-red-500">{error}</p>}
 
         <button
           type="submit"
           disabled={!isValid || loading}
-          className="w-full bg-[#4B9CD3] text-white font-semibold py-3 rounded-xl hover:bg-[#3a8bc2] transition-colors disabled:opacity-50"
+          className="w-full rounded-2xl bg-[#4B9CD3] py-3.5 text-white font-semibold shadow-[0_14px_28px_rgba(75,156,211,0.22)] hover:bg-[#3a8bc2] disabled:opacity-50"
         >
           {loading ? "Uploading..." : "Post Listing"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

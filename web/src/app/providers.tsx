@@ -15,9 +15,10 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
     const isAuthPage = pathname.startsWith("/login");
     const isSetupPage = pathname.startsWith("/setup");
+    const isRootPage = pathname === "/";
 
     if (!user) {
-      if (!isAuthPage) router.replace("/login");
+      if (!isAuthPage && !isRootPage) router.replace("/login");
     } else if (!profile || !profile.displayName) {
       if (!isSetupPage) router.replace("/setup");
     } else {

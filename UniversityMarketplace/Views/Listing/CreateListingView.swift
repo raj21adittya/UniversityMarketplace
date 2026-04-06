@@ -11,7 +11,24 @@ struct CreateListingView: View {
 
         ScrollView {
             VStack(spacing: 20) {
-                // Photo Section
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("SELL ON CAMPUS")
+                        .font(.system(.caption, design: .rounded).weight(.bold))
+                        .tracking(2.2)
+                        .foregroundStyle(Color.carolinaMuted)
+
+                    Text("Create a polished listing")
+                        .font(.system(.largeTitle, design: .serif).weight(.semibold))
+                        .foregroundStyle(Color.carolinaInk)
+
+                    Text("Bring over the same clean, trustworthy marketplace feel with strong photos and clear details.")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.carolinaMuted)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(20)
+                .brandPanel(radius: 28)
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Photos")
                         .font(.headline)
@@ -21,8 +38,12 @@ struct CreateListingView: View {
                             if viewModel.selectedImages.count < AppConstants.maxListingImages {
                                 Button { showImagePicker = true } label: {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray6))
+                                        .fill(Color.white)
                                         .frame(width: 100, height: 100)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.carolinaStroke, style: StrokeStyle(lineWidth: 1.2, dash: [5]))
+                                        )
                                         .overlay {
                                             VStack(spacing: 4) {
                                                 Image(systemName: "plus.circle.fill")
@@ -54,8 +75,9 @@ struct CreateListingView: View {
                         }
                     }
                 }
+                .padding(18)
+                .brandPanel(radius: 24)
 
-                // Details Section
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Details")
                         .font(.headline)
@@ -71,8 +93,9 @@ struct CreateListingView: View {
                         .textFieldStyle(.roundedBorder)
                         .keyboardType(.decimalPad)
                 }
+                .padding(18)
+                .brandPanel(radius: 24)
 
-                // Category & Condition
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Category & Condition")
                         .font(.headline)
@@ -99,8 +122,9 @@ struct CreateListingView: View {
                     }
                     .pickerStyle(.segmented)
                 }
+                .padding(18)
+                .brandPanel(radius: 24)
 
-                // Location
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Location")
                         .font(.headline)
@@ -120,6 +144,8 @@ struct CreateListingView: View {
                             .stroke(Color(.separator), lineWidth: 0.5)
                     )
                 }
+                .padding(18)
+                .brandPanel(radius: 24)
 
                 if let error = viewModel.errorMessage {
                     Text(error)
@@ -145,14 +171,15 @@ struct CreateListingView: View {
                     .padding()
                     .background(
                         viewModel.isFormValid ? Color.carolinaBlue : Color.gray.opacity(0.4),
-                        in: RoundedRectangle(cornerRadius: 14)
+                        in: RoundedRectangle(cornerRadius: 18, style: .continuous)
                     )
                 }
                 .disabled(!viewModel.isFormValid || viewModel.isUploading)
             }
-            .padding()
+            .padding(20)
+            .padding(.bottom, 28)
         }
-        .background(Color.backgroundPrimary)
+        .brandScreenBackground()
         .navigationTitle("Create Listing")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

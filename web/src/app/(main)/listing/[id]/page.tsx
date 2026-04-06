@@ -120,9 +120,10 @@ export default function ListingDetailPage() {
   const isOwn = profile?.id === listing.sellerID;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 pt-4 pb-28 md:pt-18">
-      {/* Images */}
-      <div className="relative aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden mb-4">
+    <div className="shell pb-32 pt-4 md:pt-24">
+      <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+      <div>
+      <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-[30px] bg-[#EAF1F7] shadow-[0_20px_48px_rgba(29,58,95,0.1)]">
         {listing.imageURLs.length > 0 ? (
           <Image
             src={listing.imageURLs[currentImage]}
@@ -145,15 +146,14 @@ export default function ListingDetailPage() {
         )}
       </div>
 
-      {/* Image thumbnails */}
       {listing.imageURLs.length > 1 && (
-        <div className="flex gap-2 mb-4 overflow-x-auto">
+        <div className="mb-4 flex gap-3 overflow-x-auto">
           {listing.imageURLs.map((url, i) => (
             <button
               key={i}
               onClick={() => setCurrentImage(i)}
-              className={`shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ${
-                i === currentImage ? "border-[#4B9CD3]" : "border-transparent"
+              className={`h-16 w-16 shrink-0 overflow-hidden rounded-2xl border-2 ${
+                i === currentImage ? "border-[#4B9CD3]" : "border-white"
               }`}
             >
               <Image src={url} alt="" width={64} height={64} className="object-cover w-full h-full" />
@@ -162,27 +162,26 @@ export default function ListingDetailPage() {
         </div>
       )}
 
-      {/* Title & Price */}
-      <div className="flex justify-between items-start mb-3">
+      <div className="panel rounded-[30px] p-6">
+      <div className="mb-4 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">{listing.title}</h1>
-          <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
-            <span className="bg-gray-100 px-2 py-0.5 rounded-full text-xs font-medium">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6C849A]">Listing details</p>
+          <h1 className="mt-2 font-display text-4xl leading-tight text-[#16324F]">{listing.title}</h1>
+          <div className="mt-3 flex items-center gap-2 text-sm text-[#58708A]">
+            <span className="rounded-full bg-[#EEF4F9] px-3 py-1 text-xs font-semibold">
               {getConditionLabel(listing.condition)}
             </span>
             <span>{getLocationLabel(listing.locationTag)}</span>
           </div>
         </div>
-        <p className="text-2xl font-bold text-[#4B9CD3]">${listing.price.toFixed(0)}</p>
+        <p className="rounded-full bg-[#DCEBFA] px-4 py-2 text-2xl font-extrabold text-[#1F4F7A]">${listing.price.toFixed(0)}</p>
       </div>
 
-      {/* Description */}
-      <p className="text-gray-600 mb-4">{listing.description}</p>
+      <p className="mb-4 text-[15px] leading-7 text-[#58708A]">{listing.description}</p>
 
-      <hr className="mb-4" />
+      <div className="mb-5 h-px bg-[#E1EAF2]" />
 
-      {/* Seller */}
-      <div className="bg-gray-50 rounded-xl p-4 mb-4">
+      <div className="rounded-[24px] bg-[#F4F8FC] p-4">
         <div className="flex items-center gap-3">
           {listing.sellerImageURL ? (
             <Image
@@ -190,40 +189,53 @@ export default function ListingDetailPage() {
               alt=""
               width={44}
               height={44}
-              className="rounded-full object-cover"
+              className="rounded-full object-cover ring-2 ring-white"
             />
           ) : (
-            <div className="w-11 h-11 bg-gray-200 rounded-full" />
+            <div className="h-11 w-11 rounded-full bg-[#D7E4F0]" />
           )}
           <div>
-            <p className="font-semibold text-sm">
+            <p className="text-sm font-semibold text-[#16324F]">
               {listing.sellerName}
               <span className="ml-1 text-[#4B9CD3]">✓</span>
             </p>
             {seller && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-[#58708A]">
                 {seller.housingArea} · Class of {seller.graduationYear}
               </p>
             )}
           </div>
         </div>
       </div>
-
-      {/* Stats */}
-      <div className="flex gap-4 text-xs text-gray-400 mb-6">
-        <span>👁 {listing.viewCount} views</span>
-        <span>❤️ {listing.savedCount} saved</span>
-        <span>🕐 {timeAgo(listing.createdAt)}</span>
+      </div>
       </div>
 
-      {/* Action button */}
+      <div className="panel h-fit rounded-[30px] p-6 lg:sticky lg:top-24">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6C849A]">Marketplace signals</p>
+        <div className="mt-5 grid gap-3">
+          <div className="rounded-[22px] bg-white px-4 py-4 shadow-[0_12px_28px_rgba(29,58,95,0.06)]">
+            <p className="text-2xl font-extrabold text-[#16324F]">{listing.viewCount}</p>
+            <p className="text-sm text-[#58708A]">views</p>
+          </div>
+          <div className="rounded-[22px] bg-white px-4 py-4 shadow-[0_12px_28px_rgba(29,58,95,0.06)]">
+            <p className="text-2xl font-extrabold text-[#16324F]">{listing.savedCount}</p>
+            <p className="text-sm text-[#58708A]">saved by shoppers</p>
+          </div>
+          <div className="rounded-[22px] bg-white px-4 py-4 shadow-[0_12px_28px_rgba(29,58,95,0.06)]">
+            <p className="text-lg font-bold text-[#16324F]">{timeAgo(listing.createdAt)}</p>
+            <p className="text-sm text-[#58708A]">posted</p>
+          </div>
+        </div>
+      </div>
+      </div>
+
       {!listing.isSold && (
-        <div className="fixed bottom-16 md:bottom-0 left-0 right-0 bg-white/80 backdrop-blur border-t p-4 z-40">
-          <div className="max-w-3xl mx-auto">
+        <div className="fixed bottom-16 left-0 right-0 z-40 border-t border-white/80 bg-white/82 p-4 backdrop-blur-xl md:bottom-0">
+          <div className="shell max-w-3xl">
             {isOwn ? (
               <button
                 onClick={handleMarkAsSold}
-                className="w-full bg-[#4B9CD3] text-white font-semibold py-3 rounded-xl hover:bg-[#3a8bc2] transition-colors"
+                className="w-full rounded-2xl bg-[#4B9CD3] py-3.5 font-semibold text-white shadow-[0_14px_28px_rgba(75,156,211,0.22)] hover:bg-[#3a8bc2]"
               >
                 Mark as Sold
               </button>
@@ -231,7 +243,7 @@ export default function ListingDetailPage() {
               <button
                 onClick={handleMessageSeller}
                 disabled={chatLoading}
-                className="w-full bg-[#4B9CD3] text-white font-semibold py-3 rounded-xl hover:bg-[#3a8bc2] transition-colors disabled:opacity-50"
+                className="w-full rounded-2xl bg-[#4B9CD3] py-3.5 font-semibold text-white shadow-[0_14px_28px_rgba(75,156,211,0.22)] hover:bg-[#3a8bc2] disabled:opacity-50"
               >
                 {chatLoading ? "Opening Chat..." : "Message Seller"}
               </button>
