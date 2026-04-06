@@ -64,9 +64,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+      setLoading(true);
       setUser(firebaseUser);
       if (firebaseUser) {
-        await fetchProfile(firebaseUser.uid);
+        try {
+          await fetchProfile(firebaseUser.uid);
+        } catch (e) {
+          console.error("Error fetching profile on auth change:", e);
+        }
       } else {
         setProfile(null);
       }

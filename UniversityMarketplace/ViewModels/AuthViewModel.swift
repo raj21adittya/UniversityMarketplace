@@ -24,17 +24,25 @@ final class AuthViewModel {
     private let userService = UserService()
 
     init() {
-        checkAuthState()
-    }
-
-    func checkAuthState() {
-        guard let firebaseUser = authService.currentUser else {
+        // Initial state
+        if let user = authService.currentUser {
+            Task { await loadUserProfile(userID: user.uid) }
+        } else {
             authState = .signedOut
-            return
         }
-
-        Task {
-            await loadUserProfile(userID: firebaseUser.uid)
+        
+        // Listen for auth changes
+        _ = withObservationTracking {
+            authService.currentUser
+        } onChange: { [weak self] in
+            Task { @MainActor in
+                if let user = self?.authService.currentUser {
+                    await self?.loadUserProfile(userID: user.uid)
+                } else {
+                    self?.currentUserProfile = nil
+                    self?.authState = .signedOut
+                }
+            }
         }
     }
 

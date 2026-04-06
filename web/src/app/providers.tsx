@@ -26,10 +26,13 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [user, profile, loading, pathname, router]);
 
-  if (loading) {
+  if (loading || (user && !profile && !pathname.startsWith("/setup"))) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-400">
-        Loading...
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <div className="w-12 h-12 border-4 border-brand/20 border-t-brand rounded-full animate-spin" />
+        <p className="text-sm font-medium text-text-muted animate-pulse">
+          Syncing your profile...
+        </p>
       </div>
     );
   }
