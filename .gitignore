@@ -1,0 +1,40 @@
+# Xcode
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+xcuserdata/
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Node / Web
+web/node_modules/
+web/.next/
+web/out/
+
+# Firebase
+firebase-hosting/node_modules/
+firebase-hosting/functions/node_modules/
+firebase-debug.log
+.firebase/
+
+# Environment / Secrets
+.env
+.env.local
+.env.production
+
+# Misc
+*.log
+.claude/
