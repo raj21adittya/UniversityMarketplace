@@ -65,7 +65,7 @@ final class AuthViewModel {
 
     func signInOrCreateAccount() async {
         guard email.isValidUNCEmail else {
-            errorMessage = "Please enter a valid UNC email (@unc.edu, @kenan-flagler.unc.edu, or @business.unc.edu)"
+            errorMessage = "Please enter a valid UNC email (e.g., @unc.edu, @kenan-flagler.unc.edu, etc.)"
             return
         }
 

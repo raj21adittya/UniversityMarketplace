@@ -4,7 +4,12 @@ extension String {
     private static let allowedDomains = [
         "@unc.edu",
         "@kenan-flagler.unc.edu",
-        "@business.unc.edu"
+        "@business.unc.edu",
+        "@med.unc.edu",
+        "@ad.unc.edu",
+        "@email.unc.edu",
+        "@live.unc.edu",
+        "@cs.unc.edu"
     ]
 
     var isValidUNCEmail: Bool {

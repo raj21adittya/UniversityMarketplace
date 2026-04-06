@@ -18,6 +18,11 @@ export const ALLOWED_EMAIL_DOMAINS = [
   "unc.edu",
   "kenan-flagler.unc.edu",
   "business.unc.edu",
+  "med.unc.edu",
+  "ad.unc.edu",
+  "email.unc.edu",
+  "live.unc.edu",
+  "cs.unc.edu",
 ];
 
 export const CATEGORIES = [
