@@ -15,32 +15,61 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
     const isAuthPage = pathname.startsWith("/login");
     const isSetupPage = pathname.startsWith("/setup");
-    const isRootPage = pathname === "/";
 
     if (!user) {
-      if (!isAuthPage) router.replace("/login");
+      if (!isAuthPage) {
+        router.replace("/login");
+      }
     } else if (!profile || !profile.displayName) {
-      if (!isSetupPage) router.replace("/setup");
+      if (!isSetupPage) {
+        router.replace("/setup");
+      }
     } else {
-      if (isAuthPage || isSetupPage) router.replace("/");
+      if (isAuthPage || isSetupPage) {
+        router.replace("/");
+      }
     }
   }, [user, profile, loading, pathname, router]);
 
-  if (loading || (user && !profile && !pathname.startsWith("/setup"))) {
+  // 1. Show loading while initializing or fetching profile
+  const isSyncingProfile = user && !profile && !pathname.startsWith("/setup");
+  if (loading || isSyncingProfile) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <div className="w-12 h-12 border-4 border-brand/20 border-t-brand rounded-full animate-spin" />
         <p className="text-sm font-medium text-text-muted animate-pulse">
-          Syncing your profile...
+          {loading ? "Initializing..." : "Syncing your profile..."}
         </p>
       </div>
     );
   }
 
+  // 2. Strict rendering: Only render if the current route matches the auth state
+  const isAuthPage = pathname.startsWith("/login");
+  const isSetupPage = pathname.startsWith("/setup");
+
+  // If not logged in, only allow Auth pages
+  if (!user) {
+    if (!isAuthPage) return null; // Wait for redirect to /login
+    return <main>{children}</main>;
+  }
+
+  // If logged in but no profile, only allow Setup page
+  if (!profile || !profile.displayName) {
+    if (!isSetupPage) return null; // Wait for redirect to /setup
+    return <main>{children}</main>;
+  }
+
+  // If fully logged in, don't allow Auth/Setup pages
+  if (isAuthPage || isSetupPage) {
+    return null; // Wait for redirect to /
+  }
+
+  // Fully authenticated and on a valid page
   return (
     <>
-      {profile && profile.displayName && <Navbar />}
-      <main className={profile && profile.displayName ? "md:pt-14 pb-14 md:pb-0" : ""}>
+      <Navbar />
+      <main className="md:pt-14 pb-14 md:pb-0">
         {children}
       </main>
     </>
