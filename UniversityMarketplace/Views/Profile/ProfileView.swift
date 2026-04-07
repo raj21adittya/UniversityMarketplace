@@ -13,110 +13,113 @@ struct ProfileView: View {
     ]
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                if let user = authViewModel.currentUserProfile {
-                    profileHeader(user: user)
-                }
-
-                VStack(spacing: 0) {
-                    NavigationLink {
-                        SavedItemsView()
-                    } label: {
-                        profileRow(icon: "heart.fill", title: "Saved Items", color: .red)
+        ZStack {
+            BrandBackground()
+            
+            ScrollView {
+                VStack(spacing: 24) {
+                    if let user = authViewModel.currentUserProfile {
+                        profileHeader(user: user)
                     }
 
-                    Divider().padding(.leading, 48)
+                    VStack(spacing: 0) {
+                        NavigationLink {
+                            SavedItemsView()
+                        } label: {
+                            profileRow(icon: "heart.fill", title: "Saved Items", color: .red)
+                        }
 
-                    NavigationLink {
-                        EditProfileView()
-                    } label: {
-                        profileRow(icon: "pencil.circle.fill", title: "Edit Profile", color: Color.carolinaBlue)
-                    }
-                }
-                .padding(4)
-                .brandPanel(radius: 24)
-                .padding(.horizontal, 20)
+                        Divider().padding(.leading, 56)
 
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("Active Listings")
-                            .font(.system(.title3, design: .serif).weight(.semibold))
-                        Spacer()
-                        Text("\(viewModel.activeListings.count) items")
-                            .font(.caption)
-                            .foregroundStyle(Color.carolinaMuted)
+                        NavigationLink {
+                            EditProfileView()
+                        } label: {
+                            profileRow(icon: "pencil.circle.fill", title: "Edit Profile", color: Color.carolinaBlue)
+                        }
                     }
+                    .brandPanel(radius: 28)
                     .padding(.horizontal, 20)
 
-                    if viewModel.activeListings.isEmpty {
-                        EmptyStateView(
-                            icon: "tag",
-                            title: "No Active Listings",
-                            message: "Items you list for sale will appear here"
-                        )
-                    } else {
-                        LazyVGrid(columns: columns, spacing: 12) {
-                            ForEach(viewModel.activeListings) { listing in
-                                NavigationLink(value: listing) {
-                                    ListingCardView(listing: listing)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                        .padding(.horizontal, 20)
-                    }
-                }
-
-                if !viewModel.soldListings.isEmpty {
-                    VStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 20) {
                         HStack {
-                            Text("Sold")
-                                .font(.system(.title3, design: .serif).weight(.semibold))
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Active Listings")
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .foregroundStyle(Color.carolinaNavy)
+                                Rectangle().fill(Color.carolinaBlue).frame(width: 20, height: 2).cornerRadius(1)
+                            }
                             Spacer()
-                            Text("\(viewModel.soldListings.count) items")
-                                .font(.caption)
+                            Text("\(viewModel.activeListings.count) items")
+                                .font(.caption.bold())
                                 .foregroundStyle(Color.carolinaMuted)
                         }
                         .padding(.horizontal, 20)
 
-                        LazyVGrid(columns: columns, spacing: 12) {
-                            ForEach(viewModel.soldListings) { listing in
-                                NavigationLink(value: listing) {
-                                    ListingCardView(listing: listing)
-                                        .opacity(0.6)
-                                        .overlay(alignment: .topLeading) {
-                                            Text("SOLD")
-                                                .font(.caption2.bold())
-                                                .foregroundStyle(.white)
-                                                .padding(.horizontal, 8)
-                                                .padding(.vertical, 3)
-                                                .background(.red, in: Capsule())
-                                                .padding(8)
-                                        }
+                        if viewModel.activeListings.isEmpty {
+                            EmptyStateView(
+                                icon: "tag",
+                                title: "Discovery",
+                                message: "Items you list for sale will appear here"
+                            )
+                            .padding(.top, 20)
+                        } else {
+                            LazyVGrid(columns: columns, spacing: 16) {
+                                ForEach(viewModel.activeListings) { listing in
+                                    NavigationLink(value: listing) {
+                                        ListingCardView(listing: listing)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
                             }
+                            .padding(.horizontal, 20)
                         }
-                        .padding(.horizontal, 20)
                     }
-                }
+                    .padding(.top, 8)
 
-                Button(role: .destructive) {
-                    showSignOutConfirmation = true
-                } label: {
-                    Text("Sign Out")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    if !viewModel.soldListings.isEmpty {
+                        VStack(alignment: .leading, spacing: 20) {
+                            HStack {
+                                Text("Sales History")
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .foregroundStyle(Color.carolinaNavy)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 20)
+
+                            LazyVGrid(columns: columns, spacing: 16) {
+                                ForEach(viewModel.soldListings) { listing in
+                                    NavigationLink(value: listing) {
+                                        ListingCardView(listing: listing)
+                                            .opacity(0.5)
+                                            .grayscale(0.5)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                        }
+                    }
+
+                    Button(role: .destructive) {
+                        showSignOutConfirmation = true
+                    } label: {
+                        Text("Sign Out")
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundStyle(Color.carolinaMuted)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(Color.white.opacity(0.5), in: RoundedRectangle(cornerRadius: 20))
+                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.carolinaStroke, lineWidth: 0.5))
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 40)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 32)
+                .padding(.top, 16)
             }
-            .padding(.top, 16)
         }
         .brandScreenBackground()
         .navigationTitle("Profile")
+        .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: Listing.self) { listing in
             ListingDetailView(listing: listing)
         }
@@ -144,52 +147,45 @@ struct ProfileView: View {
 
     private func profileHeader(user: UMUser) -> some View {
         VStack(spacing: 12) {
-            Text("PROFILE")
-                .font(.system(.caption, design: .rounded).weight(.bold))
-                .tracking(2.2)
+            Text("COMMUNITY MEMBER")
+                .font(.system(size: 8, weight: .bold))
+                .tracking(2)
                 .foregroundStyle(Color.carolinaMuted)
 
             if let imageURL = user.profileImageURL {
-                CachedImageView(url: imageURL, size: 80)
+                CachedImageView(url: imageURL, size: 70)
                     .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 3))
+                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
             } else {
                 Image(systemName: "person.circle.fill")
-                    .font(.system(size: 80))
+                    .font(.system(size: 70))
                     .foregroundStyle(Color.carolinaBlue)
             }
 
             VStack(spacing: 4) {
                 HStack(spacing: 4) {
                     Text(user.displayName)
-                        .font(.system(.title2, design: .serif).weight(.semibold))
-                    VerifiedBadge(size: 16)
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.carolinaNavy)
+                        .lineLimit(1)
+                    VerifiedBadge(size: 14)
                 }
 
                 Text("\(user.housingArea) · Class of \(user.graduationYear)")
-                    .font(.subheadline)
+                    .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.carolinaMuted)
-
-                if user.averageRating > 0 {
-                    HStack(spacing: 4) {
-                        Image(systemName: "star.fill")
-                            .foregroundStyle(.orange)
-                        Text(String(format: "%.1f", user.averageRating))
-                        Text("(\(user.reviewCount) reviews)")
-                            .foregroundStyle(Color.carolinaMuted)
-                    }
-                    .font(.caption)
-                }
+                    .lineLimit(1)
             }
 
-            HStack(spacing: 32) {
-                statItem(value: "\(user.listingCount)", label: "Listed")
+            HStack(spacing: 0) {
+                statItem(value: "\(user.listingCount)", label: "Items")
                 statItem(value: String(format: "%.1f", user.averageRating), label: "Rating")
                 statItem(value: "\(user.reviewCount)", label: "Reviews")
             }
             .padding(.top, 4)
         }
         .padding(20)
+        .frame(maxWidth: .infinity)
         .brandPanel(radius: 30)
         .padding(.horizontal, 20)
     }
@@ -197,9 +193,10 @@ struct ProfileView: View {
     private func statItem(value: String, label: String) -> some View {
         VStack(spacing: 2) {
             Text(value)
-                .font(.system(.title3, design: .rounded).weight(.heavy))
-            Text(label)
-                .font(.caption)
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.carolinaNavy)
+            Text(label.uppercased())
+                .font(.system(size: 8, weight: .bold))
                 .foregroundStyle(Color.carolinaMuted)
         }
         .frame(maxWidth: .infinity)

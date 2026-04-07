@@ -33,6 +33,7 @@ private struct BrandPanelModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
             .background(
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
                     .fill(Color.white.opacity(0.85))
