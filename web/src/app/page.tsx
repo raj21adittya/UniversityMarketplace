@@ -93,63 +93,59 @@ export default function HomePage() {
     : listings;
 
   return (
-    <div className="shell pb-28 pt-4 md:pt-24">
-      <section className="panel overflow-hidden rounded-[34px] p-5 md:p-8">
-        <div className="grid gap-6 md:grid-cols-[1.5fr_0.8fr] md:items-end">
-          <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#6C849A]">
-              Carolina marketplace
-            </p>
-            <h1 className="font-display text-4xl leading-tight text-[#16324F] md:text-5xl">
-              Buy, sell, and discover campus finds in UNC blue style.
+    <div className="bg-white min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-[65vh] min-h-[550px] flex items-center overflow-hidden bg-white">
+        <img 
+          src="https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&q=80&w=2000" 
+          alt="Scandinavian Minimalist Interior" 
+          className="absolute inset-0 w-full h-full object-cover opacity-100"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+        
+        <div className="shell relative z-10">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4B9CD3]/10 border border-[#4B9CD3]/20 mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4B9CD3] animate-pulse"></span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#1F4F7A]">
+                UNC Campus Exclusive
+              </span>
+            </div>
+            <h1 className="font-display text-5xl md:text-7xl leading-[1.1] text-[#16324F] mb-6 tracking-tight">
+              Better living, <br />
+              <span className="text-[#4B9CD3]">shared on campus.</span>
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-[#58708A] md:text-base">
-              Browse recent student listings, filter by category, and keep the feed focused on the best active items around Chapel Hill.
+            <p className="text-lg text-[#58708A] max-w-lg leading-relaxed mb-10 font-medium">
+              A refined marketplace for Tar Heels to exchange furniture, essentials, and student finds.
             </p>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-[24px] bg-white px-4 py-5 shadow-[0_14px_30px_rgba(29,58,95,0.08)]">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6C849A]">Live</p>
-              <p className="mt-3 text-3xl font-extrabold text-[#16324F]">{listings.length}</p>
-              <p className="mt-1 text-sm text-[#58708A]">active picks</p>
-            </div>
-            <div className="rounded-[24px] bg-[#4B9CD3] px-4 py-5 text-white shadow-[0_18px_36px_rgba(75,156,211,0.28)]">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Focus</p>
-              <p className="mt-3 text-3xl font-extrabold">{selectedCategory ? "1" : "All"}</p>
-              <p className="mt-1 text-sm text-white/80">category view</p>
-            </div>
-            <div className="rounded-[24px] bg-[#16324F] px-4 py-5 text-white shadow-[0_18px_36px_rgba(22,50,79,0.2)]">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Campus</p>
-              <p className="mt-3 text-3xl font-extrabold">UNC</p>
-              <p className="mt-1 text-sm text-white/80">student-to-student</p>
+            <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-[#16324F]">{listings.length}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#6C849A]">Live Listings</span>
+              </div>
+              <div className="w-px h-10 bg-[#D7E4F0] mx-4"></div>
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-[#16324F]">UNC</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#6C849A]">Verified Only</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mt-6">
-        <div className="panel rounded-[30px] p-4 md:p-5">
-          <div className="mb-4 flex items-center justify-between gap-4">
-            <div>
-              <h2 className="font-display text-2xl text-[#16324F]">Explore listings</h2>
-              <p className="mt-1 text-sm text-[#58708A]">Familiar marketplace browsing, refined for campus.</p>
-            </div>
-            <div className="hidden rounded-full bg-[#DCEBFA] px-4 py-2 text-sm font-semibold text-[#1F4F7A] md:block">
-              {filtered.length} shown
-            </div>
-          </div>
-
-          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+      {/* Category Navigation */}
+      <section className="sticky top-0 md:top-14 z-40 bg-white/80 backdrop-blur-xl border-b border-[#F4F8FC]">
+        <div className="shell py-4">
+          <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
             <button
               onClick={() => setSelectedCategory(null)}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold ${
+              className={`shrink-0 px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
                 !selectedCategory
-                  ? "bg-[#4B9CD3] text-white shadow-[0_12px_24px_rgba(75,156,211,0.26)]"
-                  : "bg-[#EEF4F9] text-[#58708A] hover:bg-[#DCEBFA] hover:text-[#16324F]"
+                  ? "bg-[#16324F] text-white shadow-lg shadow-[#16324F]/20"
+                  : "bg-transparent text-[#58708A] hover:text-[#16324F]"
               }`}
             >
-              All listings
+              All
             </button>
             {CATEGORIES.map((cat) => (
               <button
@@ -157,28 +153,48 @@ export default function HomePage() {
                 onClick={() =>
                   setSelectedCategory(selectedCategory === cat.value ? null : cat.value)
                 }
-                className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold ${
+                className={`shrink-0 px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
                   selectedCategory === cat.value
-                    ? "bg-[#4B9CD3] text-white shadow-[0_12px_24px_rgba(75,156,211,0.26)]"
-                    : "bg-[#EEF4F9] text-[#58708A] hover:bg-[#DCEBFA] hover:text-[#16324F]"
+                    ? "bg-[#16324F] text-white shadow-lg shadow-[#16324F]/20"
+                    : "bg-transparent text-[#58708A] hover:text-[#16324F]"
                 }`}
               >
-                {cat.icon} {cat.label}
+                {cat.label}
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="mt-6">
+      {/* Main Content */}
+      <main className="shell py-12">
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <h2 className="text-2xl font-display font-bold text-[#16324F]">
+              {selectedCategory 
+                ? CATEGORIES.find(c => c.value === selectedCategory)?.label 
+                : "Recent Discoveries"}
+            </h2>
+            <div className="w-12 h-1 bg-[#4B9CD3] mt-2 rounded-full"></div>
+          </div>
+          <span className="text-xs font-bold text-[#6C849A] uppercase tracking-widest">
+            {filtered.length} items found
+          </span>
+        </div>
+
         {loading ? (
-          <div className="panel rounded-[30px] py-16 text-center text-[#6C849A]">Loading listings...</div>
+          <div className="py-32 flex flex-col items-center gap-4">
+            <div className="w-10 h-10 border-2 border-[#D7E4F0] border-t-[#4B9CD3] rounded-full animate-spin"></div>
+            <p className="text-xs font-bold uppercase tracking-widest text-[#6C849A]">Curating the feed...</p>
+          </div>
         ) : error ? (
-          <div className="panel rounded-[30px] py-16 text-center text-red-500">{error}</div>
+          <div className="bg-red-50 text-red-600 p-8 rounded-[2rem] text-center font-bold border border-red-100">
+            {error}
+          </div>
         ) : (
           <ListingGrid listings={filtered} />
         )}
-      </section>
+      </main>
     </div>
   );
 }

@@ -22,46 +22,41 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center px-6 py-12 relative overflow-hidden bg-[#f4f8fc]">
-      {/* Aesthetic Background Orbs */}
-      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-brand/10 rounded-full blur-[100px] animate-pulse" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-brand/5 rounded-full blur-[80px]" />
-      
-      <div className="max-w-md w-full relative z-10">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-[2.5rem] shadow-[0_20px_40px_rgba(22,50,79,0.08)] border border-border/40 mb-8 text-5xl transform transition-transform hover:scale-105 duration-500">
-            🏛️
+    <div className="min-h-screen flex flex-col md:flex-row bg-white overflow-hidden">
+      {/* Left: Auth Form */}
+      <div className="w-full md:w-[45%] flex items-center justify-center p-8 md:p-16 lg:p-24 bg-white z-10">
+        <div className="max-w-sm w-full">
+          <div className="mb-12">
+            <p className="font-display text-2xl font-bold text-[#16324F] tracking-tight mb-10">
+              Marketplace<span className="text-[#4B9CD3]">.</span>
+            </p>
+            <h1 className="text-4xl font-display font-bold text-[#16324F] tracking-tight mb-3">
+              {isSignUp ? "Join the community" : "Welcome back"}
+            </h1>
+            <p className="text-[#58708A] font-medium">
+              {isSignUp 
+                ? "The student marketplace for UNC Chapel Hill." 
+                : "Sign in to browse and manage your listings."}
+            </p>
           </div>
-          <h1 className="text-5xl font-display font-bold text-foreground tracking-tight">
-            UNC Marketplace
-          </h1>
-          <p className="text-text-muted mt-4 font-medium text-lg">
-            Buy & sell with fellow Tar Heels
-          </p>
-        </div>
-
-        <div className="panel p-10 md:p-12 rounded-[3rem] backdrop-blur-xl bg-white/80 border-white/40 shadow-[0_32px_64px_rgba(22,50,79,0.06)]">
-          <h2 className="text-2xl font-display font-bold mb-8 text-foreground text-center">
-            {isSignUp ? "Create your account" : "Welcome back"}
-          </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted/70 ml-1">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold uppercase tracking-widest text-[#16324F]/60 ml-0.5">
                 University Email
               </label>
               <input
                 type="email"
-                placeholder="youremail@unc.edu"
+                placeholder="you@unc.edu"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-surface-muted/40 border border-border/60 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40 focus:border-brand focus:bg-white transition-all duration-300"
+                className="w-full border-b-2 border-[#D7E4F0] focus:border-[#4B9CD3] outline-none py-3 text-base transition-all bg-transparent placeholder:text-[#D7E4F0]"
                 required
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted/70 ml-1">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold uppercase tracking-widest text-[#16324F]/60 ml-0.5">
                 Password
               </label>
               <input
@@ -69,14 +64,14 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-surface-muted/40 border border-border/60 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40 focus:border-brand focus:bg-white transition-all duration-300"
+                className="w-full border-b-2 border-[#D7E4F0] focus:border-[#4B9CD3] outline-none py-3 text-base transition-all bg-transparent placeholder:text-[#D7E4F0]"
                 required
                 minLength={6}
               />
             </div>
 
             {error && (
-              <div className="bg-red-50/80 backdrop-blur-sm border border-red-100 text-red-600 text-xs py-4 px-5 rounded-2xl text-center font-semibold animate-in fade-in slide-in-from-top-2">
+              <div className="text-red-500 text-xs font-bold bg-red-50 p-3 rounded-lg border border-red-100 animate-in fade-in slide-in-from-top-1">
                 {error}
               </div>
             )}
@@ -84,48 +79,44 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-brand hover:bg-brand-deep text-white font-bold py-5 rounded-2xl shadow-[0_12px_24px_rgba(75,156,211,0.25)] transition-all duration-300 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100 mt-4 text-sm tracking-wide"
+              className="w-full bg-[#16324F] hover:bg-[#1F4F7A] text-white font-bold py-4 rounded-full transition-all duration-300 active:scale-[0.98] disabled:opacity-50 mt-4 text-sm tracking-wide"
             >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Please wait...
-                </span>
-              ) : isSignUp ? (
-                "Create Account"
-              ) : (
-                "Sign In"
-              )}
+              {loading ? "Please wait..." : isSignUp ? "Create Account" : "Sign In"}
             </button>
           </form>
 
-          <div className="relative my-10">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border/40"></div>
-            </div>
-            <div className="relative flex justify-center text-[10px] font-bold uppercase tracking-[0.2em]">
-              <span className="bg-transparent px-4 text-text-muted/40">or</span>
-            </div>
+          <div className="mt-10 pt-10 border-t border-[#F4F8FC] flex flex-col items-center gap-4">
+            <button
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-sm font-bold text-[#4B9CD3] hover:text-[#1F4F7A] transition-all"
+            >
+              {isSignUp
+                ? "Already have an account? Sign In"
+                : "Need an account? Sign Up"}
+            </button>
+            <p className="text-[10px] text-[#6C849A] font-medium tracking-wide uppercase">
+              Exclusive to @unc.edu domains
+            </p>
           </div>
-
-          <button
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="w-full text-center text-sm font-bold text-brand hover:text-brand-deep transition-all duration-300"
-          >
-            {isSignUp
-              ? "Already a member? Sign In"
-              : "New to campus? Sign Up"}
-          </button>
         </div>
+      </div>
 
-        <div className="text-center mt-12 space-y-4">
-          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted/50 max-w-[300px] mx-auto leading-relaxed">
-            Exclusively for @unc.edu and related UNC Chapel Hill domains
-          </p>
-          <div className="flex justify-center gap-6">
-            <div className="w-1 h-1 bg-brand/20 rounded-full"></div>
-            <div className="w-1 h-1 bg-brand/20 rounded-full"></div>
-            <div className="w-1 h-1 bg-brand/20 rounded-full"></div>
+      {/* Right: Minimalist Imagery */}
+      <div className="hidden md:block w-[55%] relative bg-[#F4F8FC]">
+        <img 
+          src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1200" 
+          alt="Minimalist Furniture" 
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#16324F]/60 via-transparent to-transparent"></div>
+        <div className="absolute bottom-16 left-16 right-16 text-white">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-[2rem] max-w-lg">
+            <h2 className="text-3xl font-display font-bold mb-4 leading-tight">
+              Furniture, textbooks, and more—refined for campus life.
+            </h2>
+            <p className="text-white/80 font-medium leading-relaxed">
+              Join thousands of Tar Heels buying and selling essentials within the community.
+            </p>
           </div>
         </div>
       </div>

@@ -91,130 +91,153 @@ export default function SellPage() {
   const isValid = title && description && price > 0 && images.length > 0;
 
   return (
-    <div className="shell pb-28 pt-4 md:pt-24">
-      <div className="panel rounded-[34px] p-5 md:p-8">
-      <div className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6C849A]">Sell on campus</p>
-        <h1 className="font-display text-4xl text-[#16324F]">Create a polished listing</h1>
-        <p className="mt-2 text-sm text-[#58708A]">
-          Strong photos, a clean title, and a confident price help your listing feel trustworthy.
-        </p>
-      </div>
+    <div className="bg-white min-h-screen pt-12 md:pt-24 pb-28">
+      <div className="shell">
+        <div className="max-w-3xl mb-12">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#6C849A] mb-3">Seller Studio</p>
+          <h1 className="text-4xl md:text-5xl font-display font-bold text-[#16324F] tracking-tight mb-4">
+            Create a listing
+          </h1>
+          <p className="text-[#58708A] font-medium text-lg">
+            High-quality photos and clear descriptions help your items sell faster.
+          </p>
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label className="mb-2 block text-sm font-semibold text-[#16324F]">Photos (up to 5)</label>
-          <div className="flex gap-2 flex-wrap">
-            {previews.map((url, i) => (
-              <div key={i} className="relative h-24 w-24 overflow-hidden rounded-[20px]">
-                <Image src={url} alt="" fill className="object-cover" />
-                <button
-                  type="button"
-                  onClick={() => removeImage(i)}
-                  className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-            {images.length < 5 && (
-              <label className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-[20px] border-2 border-dashed border-[#BFD4E4] bg-white text-[#7A92A8] hover:border-[#4B9CD3] hover:text-[#4B9CD3]">
-                <span className="text-2xl">+</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
+        <form onSubmit={handleSubmit} className="grid gap-12 lg:grid-cols-[1fr_400px]">
+          <div className="space-y-10">
+            {/* Photo Section */}
+            <div className="bg-[#F4F8FC] rounded-[2.5rem] p-8 border border-[#D7E4F0]/50">
+              <label className="text-[11px] font-bold uppercase tracking-widest text-[#16324F] mb-6 block">
+                Visuals (up to 5)
               </label>
-            )}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                {previews.map((url, i) => (
+                  <div key={i} className="relative aspect-square overflow-hidden rounded-2xl bg-white shadow-sm group">
+                    <Image src={url} alt="" fill className="object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(i)}
+                      className="absolute right-2 top-2 w-6 h-6 flex items-center justify-center rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                {images.length < 5 && (
+                  <label className="aspect-square cursor-pointer flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#BFD4E4] bg-white text-[#4B9CD3] hover:border-[#4B9CD3] hover:bg-[#4B9CD3]/5 transition-all">
+                    <span className="text-2xl font-light">+</span>
+                    <span className="text-[9px] font-bold uppercase tracking-tighter">Upload</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+            </div>
+
+            {/* Basic Info */}
+            <div className="space-y-8">
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-[#16324F]/60 ml-0.5">Item Title</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Minimalist Wooden Desk"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full border-b-2 border-[#D7E4F0] focus:border-[#4B9CD3] outline-none py-3 text-xl font-medium transition-all bg-transparent placeholder:text-[#D7E4F0]"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-[#16324F]/60 ml-0.5">Price ($)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={priceText}
+                  onChange={(e) => setPriceText(e.target.value)}
+                  className="w-full border-b-2 border-[#D7E4F0] focus:border-[#4B9CD3] outline-none py-3 text-xl font-medium transition-all bg-transparent placeholder:text-[#D7E4F0]"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-[#16324F]/60 ml-0.5">Detailed Description</label>
+                <textarea
+                  placeholder="Tell buyers about the condition, dimensions, and details..."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  rows={4}
+                  className="w-full border-2 border-[#D7E4F0] focus:border-[#4B9CD3] rounded-2xl p-4 text-base transition-all bg-transparent placeholder:text-[#D7E4F0] outline-none"
+                  required
+                />
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-semibold text-[#16324F]">Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm outline-none focus:border-[#4B9CD3] focus:ring-4 focus:ring-[#DCEBFA]"
-            required
-          />
-        </div>
+          {/* Sidebar Config */}
+          <div className="space-y-6">
+            <div className="bg-[#F4F8FC] rounded-[2rem] p-8 border border-[#D7E4F0]/50 sticky top-24">
+              <h3 className="text-[11px] font-bold uppercase tracking-widest text-[#16324F] mb-6">Listing Settings</h3>
+              
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#16324F]/50">Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full bg-white border-2 border-[#D7E4F0] rounded-xl px-4 py-3 text-sm text-[#16324F] outline-none"
+                  >
+                    {CATEGORIES.map((c) => (
+                      <option key={c.value} value={c.value}>{c.label}</option>
+                    ))}
+                  </select>
+                </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-semibold text-[#16324F]">Description</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm outline-none focus:border-[#4B9CD3] focus:ring-4 focus:ring-[#DCEBFA]"
-            required
-          />
-        </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#16324F]/50">Condition</label>
+                  <select
+                    value={condition}
+                    onChange={(e) => setCondition(e.target.value)}
+                    className="w-full bg-white border-2 border-[#D7E4F0] rounded-xl px-4 py-3 text-sm text-[#16324F] outline-none"
+                  >
+                    {CONDITIONS.map((c) => (
+                      <option key={c.value} value={c.value}>{c.label}</option>
+                    ))}
+                  </select>
+                </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-semibold text-[#16324F]">Price ($)</label>
-          <input
-            type="number"
-            step="0.01"
-            value={priceText}
-            onChange={(e) => setPriceText(e.target.value)}
-            className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm outline-none focus:border-[#4B9CD3] focus:ring-4 focus:ring-[#DCEBFA]"
-            required
-          />
-        </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#16324F]/50">Meeting Location</label>
+                  <select
+                    value={locationTag}
+                    onChange={(e) => setLocationTag(e.target.value)}
+                    className="w-full bg-white border-2 border-[#D7E4F0] rounded-xl px-4 py-3 text-sm text-[#16324F] outline-none"
+                  >
+                    {LOCATIONS.map((l) => (
+                      <option key={l.value} value={l.value}>{l.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          <div>
-            <label className="mb-1 block text-sm font-semibold text-[#16324F]">Category</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-3 py-3 text-sm outline-none"
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value}>{c.label}</option>
-              ))}
-            </select>
+              {error && <p className="text-xs text-red-500 font-bold mt-4">{error}</p>}
+
+              <button
+                type="submit"
+                disabled={!isValid || loading}
+                className="w-full mt-8 bg-[#16324F] hover:bg-[#1F4F7A] text-white font-bold py-4 rounded-full transition-all duration-300 disabled:opacity-50 text-sm tracking-wide shadow-lg shadow-[#16324F]/20"
+              >
+                {loading ? "Publishing..." : "Post Listing"}
+              </button>
+            </div>
           </div>
-          <div>
-            <label className="mb-1 block text-sm font-semibold text-[#16324F]">Condition</label>
-            <select
-              value={condition}
-              onChange={(e) => setCondition(e.target.value)}
-              className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-3 py-3 text-sm outline-none"
-            >
-              {CONDITIONS.map((c) => (
-                <option key={c.value} value={c.value}>{c.label}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-semibold text-[#16324F]">Location</label>
-            <select
-              value={locationTag}
-              onChange={(e) => setLocationTag(e.target.value)}
-              className="w-full rounded-2xl border border-[#D7E4F0] bg-white px-3 py-3 text-sm outline-none"
-            >
-              {LOCATIONS.map((l) => (
-                <option key={l.value} value={l.value}>{l.label}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {error && <p className="text-sm text-red-500">{error}</p>}
-
-        <button
-          type="submit"
-          disabled={!isValid || loading}
-          className="w-full rounded-2xl bg-[#4B9CD3] py-3.5 text-white font-semibold shadow-[0_14px_28px_rgba(75,156,211,0.22)] hover:bg-[#3a8bc2] disabled:opacity-50"
-        >
-          {loading ? "Uploading..." : "Post Listing"}
-        </button>
-      </form>
+        </form>
       </div>
     </div>
   );

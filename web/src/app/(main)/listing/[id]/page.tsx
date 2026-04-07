@@ -120,137 +120,154 @@ export default function ListingDetailPage() {
   const isOwn = profile?.id === listing.sellerID;
 
   return (
-    <div className="shell pb-32 pt-4 md:pt-24">
-      <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-      <div>
-      <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-[30px] bg-[#EAF1F7] shadow-[0_20px_48px_rgba(29,58,95,0.1)]">
-        {listing.imageURLs.length > 0 ? (
-          <Image
-            src={listing.imageURLs[currentImage]}
-            alt={listing.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 768px"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400 text-lg">
-            No Image
-          </div>
-        )}
-        {listing.isSold && (
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <span className="bg-red-500 text-white text-xl font-bold px-5 py-2 rounded-full">
-              SOLD
-            </span>
-          </div>
-        )}
-      </div>
+    <div className="bg-white min-h-screen pt-12 md:pt-24 pb-32">
+      <div className="shell">
+        <div className="grid gap-12 lg:grid-cols-[1fr_450px]">
+          {/* Left: Gallery */}
+          <div className="space-y-6">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] bg-[#F4F8FC] border border-[#D7E4F0]/50 shadow-sm">
+              {listing.imageURLs.length > 0 ? (
+                <Image
+                  src={listing.imageURLs[currentImage]}
+                  alt={listing.title}
+                  fill
+                  className="object-cover transition-all duration-700 ease-in-out"
+                  sizes="(max-width: 768px) 100vw, 800px"
+                  priority
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-[#D7E4F0] gap-4">
+                  <span className="text-6xl">🖼️</span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-[#6C849A]">No imagery provided</span>
+                </div>
+              )}
+              {listing.isSold && (
+                <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center">
+                  <span className="bg-[#16324F] text-white text-xs font-bold px-6 py-2.5 rounded-full tracking-[0.2em] uppercase shadow-xl">
+                    Closed / Sold
+                  </span>
+                </div>
+              )}
+            </div>
 
-      {listing.imageURLs.length > 1 && (
-        <div className="mb-4 flex gap-3 overflow-x-auto">
-          {listing.imageURLs.map((url, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentImage(i)}
-              className={`h-16 w-16 shrink-0 overflow-hidden rounded-2xl border-2 ${
-                i === currentImage ? "border-[#4B9CD3]" : "border-white"
-              }`}
-            >
-              <Image src={url} alt="" width={64} height={64} className="object-cover w-full h-full" />
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="panel rounded-[30px] p-6">
-      <div className="mb-4 flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6C849A]">Listing details</p>
-          <h1 className="mt-2 font-display text-4xl leading-tight text-[#16324F]">{listing.title}</h1>
-          <div className="mt-3 flex items-center gap-2 text-sm text-[#58708A]">
-            <span className="rounded-full bg-[#EEF4F9] px-3 py-1 text-xs font-semibold">
-              {getConditionLabel(listing.condition)}
-            </span>
-            <span>{getLocationLabel(listing.locationTag)}</span>
-          </div>
-        </div>
-        <p className="rounded-full bg-[#DCEBFA] px-4 py-2 text-2xl font-extrabold text-[#1F4F7A]">${listing.price.toFixed(0)}</p>
-      </div>
-
-      <p className="mb-4 text-[15px] leading-7 text-[#58708A]">{listing.description}</p>
-
-      <div className="mb-5 h-px bg-[#E1EAF2]" />
-
-      <div className="rounded-[24px] bg-[#F4F8FC] p-4">
-        <div className="flex items-center gap-3">
-          {listing.sellerImageURL ? (
-            <Image
-              src={listing.sellerImageURL}
-              alt=""
-              width={44}
-              height={44}
-              className="rounded-full object-cover ring-2 ring-white"
-            />
-          ) : (
-            <div className="h-11 w-11 rounded-full bg-[#D7E4F0]" />
-          )}
-          <div>
-            <p className="text-sm font-semibold text-[#16324F]">
-              {listing.sellerName}
-              <span className="ml-1 text-[#4B9CD3]">✓</span>
-            </p>
-            {seller && (
-              <p className="text-xs text-[#58708A]">
-                {seller.housingArea} · Class of {seller.graduationYear}
-              </p>
+            {listing.imageURLs.length > 1 && (
+              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                {listing.imageURLs.map((url, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentImage(i)}
+                    className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl transition-all duration-300 ${
+                      i === currentImage 
+                        ? "ring-2 ring-[#4B9CD3] ring-offset-2 scale-95" 
+                        : "opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <Image src={url} alt="" fill className="object-cover" />
+                  </button>
+                ))}
+              </div>
             )}
-          </div>
-        </div>
-      </div>
-      </div>
-      </div>
 
-      <div className="panel h-fit rounded-[30px] p-6 lg:sticky lg:top-24">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6C849A]">Marketplace signals</p>
-        <div className="mt-5 grid gap-3">
-          <div className="rounded-[22px] bg-white px-4 py-4 shadow-[0_12px_28px_rgba(29,58,95,0.06)]">
-            <p className="text-2xl font-extrabold text-[#16324F]">{listing.viewCount}</p>
-            <p className="text-sm text-[#58708A]">views</p>
+            <div className="pt-8 border-t border-[#F4F8FC]">
+              <div className="max-w-2xl">
+                <h2 className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#6C849A] mb-6">Provenance & Details</h2>
+                <p className="text-[#58708A] text-lg leading-relaxed whitespace-pre-wrap font-medium">
+                  {listing.description}
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="rounded-[22px] bg-white px-4 py-4 shadow-[0_12px_28px_rgba(29,58,95,0.06)]">
-            <p className="text-2xl font-extrabold text-[#16324F]">{listing.savedCount}</p>
-            <p className="text-sm text-[#58708A]">saved by shoppers</p>
-          </div>
-          <div className="rounded-[22px] bg-white px-4 py-4 shadow-[0_12px_28px_rgba(29,58,95,0.06)]">
-            <p className="text-lg font-bold text-[#16324F]">{timeAgo(listing.createdAt)}</p>
-            <p className="text-sm text-[#58708A]">posted</p>
-          </div>
-        </div>
-      </div>
-      </div>
 
-      {!listing.isSold && (
-        <div className="fixed bottom-16 left-0 right-0 z-40 border-t border-white/80 bg-white/82 p-4 backdrop-blur-xl md:bottom-0">
-          <div className="shell max-w-3xl">
-            {isOwn ? (
-              <button
-                onClick={handleMarkAsSold}
-                className="w-full rounded-2xl bg-[#4B9CD3] py-3.5 font-semibold text-white shadow-[0_14px_28px_rgba(75,156,211,0.22)] hover:bg-[#3a8bc2]"
-              >
-                Mark as Sold
-              </button>
-            ) : (
-              <button
-                onClick={handleMessageSeller}
-                disabled={chatLoading}
-                className="w-full rounded-2xl bg-[#4B9CD3] py-3.5 font-semibold text-white shadow-[0_14px_28px_rgba(75,156,211,0.22)] hover:bg-[#3a8bc2] disabled:opacity-50"
-              >
-                {chatLoading ? "Opening Chat..." : "Message Seller"}
-              </button>
-            )}
+          {/* Right: Info Sidebar */}
+          <div className="space-y-8">
+            <div className="bg-[#F4F8FC] rounded-[3rem] p-10 border border-[#D7E4F0]/50 sticky top-24 shadow-sm">
+              <div className="flex justify-between items-start mb-8">
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="px-2.5 py-1 rounded-md bg-white border border-[#D7E4F0] text-[9px] font-bold uppercase tracking-widest text-[#1F4F7A]">
+                      {getConditionLabel(listing.condition)}
+                    </span>
+                    <span className="px-2.5 py-1 rounded-md bg-white border border-[#D7E4F0] text-[9px] font-bold uppercase tracking-widest text-[#1F4F7A]">
+                      {getLocationLabel(listing.locationTag)}
+                    </span>
+                  </div>
+                  <h1 className="text-3xl font-display font-bold text-[#16324F] leading-tight">
+                    {listing.title}
+                  </h1>
+                </div>
+                <div className="text-3xl font-bold text-[#4B9CD3] pt-1">
+                  ${listing.price.toFixed(0)}
+                </div>
+              </div>
+
+              <div className="space-y-10">
+                {/* Seller Info */}
+                <div className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-[#D7E4F0]/30">
+                  {listing.sellerImageURL ? (
+                    <Image
+                      src={listing.sellerImageURL}
+                      alt=""
+                      width={48}
+                      height={48}
+                      className="rounded-full object-cover ring-2 ring-[#F4F8FC]"
+                    />
+                  ) : (
+                    <div className="h-12 w-12 rounded-full bg-[#D7E4F0] flex items-center justify-center text-xl">👤</div>
+                  )}
+                  <div>
+                    <p className="text-sm font-bold text-[#16324F]">
+                      {listing.sellerName} <span className="text-[#4B9CD3] ml-0.5">✓</span>
+                    </p>
+                    {seller && (
+                      <p className="text-[10px] font-bold text-[#6C849A] uppercase tracking-widest">
+                        Class of {seller.graduationYear}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Signals */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-4">
+                    <p className="text-xl font-bold text-[#16324F]">{listing.viewCount}</p>
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-[#6C849A]">Interactions</p>
+                  </div>
+                  <div className="text-center p-4">
+                    <p className="text-xl font-bold text-[#16324F]">{timeAgo(listing.createdAt)}</p>
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-[#6C849A]">Listed</p>
+                  </div>
+                </div>
+
+                {/* CTA */}
+                {!listing.isSold && (
+                  <div className="pt-4">
+                    {isOwn ? (
+                      <button
+                        onClick={handleMarkAsSold}
+                        className="w-full bg-[#16324F] hover:bg-[#1F4F7A] text-white font-bold py-5 rounded-full transition-all shadow-lg shadow-[#16324F]/10 tracking-widest uppercase text-[11px]"
+                      >
+                        Mark as Sold
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleMessageSeller}
+                        disabled={chatLoading}
+                        className="w-full bg-[#16324F] hover:bg-[#1F4F7A] text-white font-bold py-5 rounded-full transition-all shadow-lg shadow-[#16324F]/10 tracking-widest uppercase text-[11px] flex items-center justify-center gap-3"
+                      >
+                        {chatLoading ? (
+                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          "Inquire with Seller"
+                        )}
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

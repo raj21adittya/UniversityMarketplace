@@ -56,82 +56,108 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="shell pb-28 pt-4 md:pt-24">
-      <div className="panel rounded-[32px] p-5 md:p-7">
-        <div className="mb-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6C849A]">Smart browse</p>
-          <h1 className="font-display text-4xl text-[#16324F]">Search the marketplace</h1>
-          <p className="mt-2 text-sm text-[#58708A]">
-            Narrow listings by category, condition, and where students are meeting.
+    <div className="bg-white min-h-screen pt-12 md:pt-24 pb-28">
+      <div className="shell">
+        <div className="max-w-3xl mb-12">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#6C849A] mb-3">Discovery</p>
+          <h1 className="text-4xl md:text-5xl font-display font-bold text-[#16324F] tracking-tight mb-4">
+            Search the marketplace
+          </h1>
+          <p className="text-[#58708A] font-medium text-lg">
+            Find exactly what you need from fellow students across campus.
           </p>
         </div>
 
-        <form onSubmit={handleSearch} className="mb-2">
-        <div className="flex gap-3">
-          <input
-            type="text"
-            placeholder="Search listings..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm text-[#16324F] outline-none focus:border-[#4B9CD3] focus:ring-4 focus:ring-[#DCEBFA]"
-          />
-          <button
-            type="submit"
-            className="rounded-2xl bg-[#4B9CD3] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(75,156,211,0.22)] hover:bg-[#3a8bc2]"
-          >
-            Search
-          </button>
+        <div className="bg-[#F4F8FC] rounded-[2.5rem] p-6 md:p-10 mb-12 border border-[#D7E4F0]/50">
+          <form onSubmit={handleSearch} className="space-y-6">
+            <div className="relative group">
+              <input
+                type="text"
+                placeholder="Search for furniture, books, or electronics..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white border-2 border-[#D7E4F0] focus:border-[#4B9CD3] rounded-2xl px-6 py-4 text-lg text-[#16324F] outline-none transition-all pr-16 shadow-sm group-focus-within:shadow-md"
+              />
+              <button
+                type="submit"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#16324F] text-white rounded-xl flex items-center justify-center hover:bg-[#1F4F7A] transition-colors shadow-lg shadow-[#16324F]/20"
+              >
+                🔍
+              </button>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#16324F]/50 ml-1">Category</label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full bg-white border-2 border-[#D7E4F0] rounded-xl px-4 py-3 text-sm text-[#16324F] outline-none focus:border-[#4B9CD3] transition-all cursor-pointer appearance-none shadow-sm"
+                >
+                  <option value="">All Categories</option>
+                  {CATEGORIES.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#16324F]/50 ml-1">Condition</label>
+                <select
+                  value={condition}
+                  onChange={(e) => setCondition(e.target.value)}
+                  className="w-full bg-white border-2 border-[#D7E4F0] rounded-xl px-4 py-3 text-sm text-[#16324F] outline-none focus:border-[#4B9CD3] transition-all cursor-pointer appearance-none shadow-sm"
+                >
+                  <option value="">Any Condition</option>
+                  {CONDITIONS.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#16324F]/50 ml-1">Location</label>
+                <select
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="w-full bg-white border-2 border-[#D7E4F0] rounded-xl px-4 py-3 text-sm text-[#16324F] outline-none focus:border-[#4B9CD3] transition-all cursor-pointer appearance-none shadow-sm"
+                >
+                  <option value="">All Locations</option>
+                  {LOCATIONS.map((l) => (
+                    <option key={l.value} value={l.value}>{l.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </form>
         </div>
 
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm text-[#16324F] outline-none"
-          >
-            <option value="">All Categories</option>
-            {CATEGORIES.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.icon} {c.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={condition}
-            onChange={(e) => setCondition(e.target.value)}
-            className="rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm text-[#16324F] outline-none"
-          >
-            <option value="">Any Condition</option>
-            {CONDITIONS.map((c) => (
-              <option key={c.value} value={c.value}>{c.label}</option>
-            ))}
-          </select>
-          <select
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="rounded-2xl border border-[#D7E4F0] bg-white px-4 py-3 text-sm text-[#16324F] outline-none"
-          >
-            <option value="">All Locations</option>
-            {LOCATIONS.map((l) => (
-              <option key={l.value} value={l.value}>{l.label}</option>
-            ))}
-          </select>
+        <div>
+          {loading ? (
+            <div className="py-32 flex flex-col items-center gap-4">
+              <div className="w-10 h-10 border-2 border-[#D7E4F0] border-t-[#4B9CD3] rounded-full animate-spin"></div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6C849A]">Finding listings...</p>
+            </div>
+          ) : searched ? (
+            <>
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-xl font-display font-bold text-[#16324F]">Search Results</h3>
+                <span className="text-[10px] font-bold text-[#6C849A] uppercase tracking-widest bg-[#F4F8FC] px-3 py-1 rounded-full border border-[#D7E4F0]/50">
+                  {results.length} items
+                </span>
+              </div>
+              <ListingGrid listings={results} />
+            </>
+          ) : (
+            <div className="py-24 text-center">
+              <div className="w-20 h-20 bg-[#F4F8FC] rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-3xl">
+                🔎
+              </div>
+              <h3 className="text-2xl font-display font-bold text-[#16324F] mb-2">Ready to explore?</h3>
+              <p className="text-[#58708A] font-medium">Use the filters above to find exactly what you're looking for.</p>
+            </div>
+          )}
         </div>
-        </form>
-      </div>
-
-      <div className="mt-6">
-      {loading ? (
-        <div className="panel rounded-[28px] py-16 text-center text-[#6C849A]">Searching...</div>
-      ) : searched ? (
-        <ListingGrid listings={results} />
-      ) : (
-        <div className="panel rounded-[28px] py-16 text-center text-[#58708A]">
-          <p className="mb-3 text-4xl">🔍</p>
-          <p className="font-display text-2xl text-[#16324F]">Search for items</p>
-          <p className="mt-2 text-sm">Start with a keyword or browse by category and location.</p>
-        </div>
-      )}
       </div>
     </div>
   );

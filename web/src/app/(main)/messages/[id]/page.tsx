@@ -108,37 +108,53 @@ export default function ChatPage() {
   const otherName = conversation.participantNames[otherId] ?? "User";
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem)] px-3 md:max-w-2xl md:mx-auto md:px-8">
+    <div className="flex flex-col h-[calc(100vh-3.5rem)] bg-white md:max-w-3xl md:mx-auto md:border-x md:border-[#F4F8FC]">
       {/* Header */}
-      <div className="border-b px-4 py-3 flex items-center gap-3 bg-white shrink-0">
-        <div>
-          <p className="font-semibold text-sm">{otherName}</p>
-          <p className="text-xs text-[#4B9CD3]">
-            {conversation.listingTitle} · ${conversation.listingPrice.toFixed(0)}
-          </p>
+      <div className="px-6 py-5 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10 border-b border-[#F4F8FC]">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-[#F4F8FC] rounded-xl flex items-center justify-center text-lg shadow-sm border border-[#D7E4F0]/30">
+            👤
+          </div>
+          <div>
+            <p className="font-bold text-[#16324F] leading-none mb-1">{otherName}</p>
+            <p className="text-[10px] font-bold text-[#4B9CD3] uppercase tracking-widest">
+              {conversation.listingTitle} · ${conversation.listingPrice.toFixed(0)}
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <button className="w-8 h-8 rounded-lg hover:bg-[#F4F8FC] flex items-center justify-center text-[#6C849A] transition-colors">
+            ℹ️
+          </button>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2 bg-gray-50">
+      <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6 bg-white scrollbar-hide">
+        <div className="text-center mb-10">
+          <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#6C849A] bg-[#F4F8FC] px-4 py-1.5 rounded-full border border-[#D7E4F0]/30">
+            Secure marketplace connection
+          </span>
+        </div>
+
         {messages.map((msg) => {
           const isMine = msg.senderID === profile.id;
           return (
             <div
               key={msg.id}
-              className={`flex ${isMine ? "justify-end" : "justify-start"}`}
+              className={`flex ${isMine ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2 duration-300`}
             >
               <div
-                className={`max-w-[75%] px-4 py-2 rounded-2xl text-sm ${
+                className={`max-w-[80%] px-5 py-3 rounded-2xl shadow-sm ${
                   isMine
-                    ? "bg-[#4B9CD3] text-white rounded-br-md"
-                    : "bg-white text-gray-800 rounded-bl-md border border-gray-100"
+                    ? "bg-[#16324F] text-white rounded-br-none"
+                    : "bg-[#F4F8FC] text-[#16324F] rounded-bl-none border border-[#D7E4F0]/30"
                 }`}
               >
-                <p>{msg.text}</p>
+                <p className="text-[15px] leading-relaxed">{msg.text}</p>
                 <p
-                  className={`text-[10px] mt-1 ${
-                    isMine ? "text-white/60" : "text-gray-400"
+                  className={`text-[9px] font-bold uppercase tracking-widest mt-2 ${
+                    isMine ? "text-white/40" : "text-[#6C849A]"
                   }`}
                 >
                   {msg.createdAt.toLocaleTimeString([], {
@@ -154,25 +170,34 @@ export default function ChatPage() {
       </div>
 
       {/* Input */}
-      <form
-        onSubmit={handleSend}
-        className="border-t bg-white px-4 py-3 flex gap-2 shrink-0"
-      >
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1 border border-gray-200 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4B9CD3]"
-        />
-        <button
-          type="submit"
-          disabled={!text.trim() || sending}
-          className="bg-[#4B9CD3] text-white rounded-full w-10 h-10 flex items-center justify-center text-lg disabled:opacity-40"
+      <div className="px-6 py-6 bg-white border-t border-[#F4F8FC]">
+        <form
+          onSubmit={handleSend}
+          className="relative flex items-center group"
         >
-          ↑
-        </button>
-      </form>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Type your message..."
+            className="w-full bg-[#F4F8FC] border-2 border-transparent focus:border-[#4B9CD3]/20 rounded-2xl px-6 py-4 text-base text-[#16324F] outline-none transition-all pr-16 font-medium"
+          />
+          <button
+            type="submit"
+            disabled={!text.trim() || sending}
+            className="absolute right-2 w-12 h-12 bg-[#16324F] text-white rounded-xl flex items-center justify-center transition-all hover:bg-[#1F4F7A] disabled:opacity-30 shadow-lg shadow-[#16324F]/10 active:scale-95"
+          >
+            {sending ? (
+              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              "↑"
+            )}
+          </button>
+        </form>
+        <p className="text-[9px] text-center text-[#6C849A] font-bold uppercase tracking-[0.15em] mt-4">
+          Always meet in public campus areas for safety
+        </p>
+      </div>
     </div>
   );
 }

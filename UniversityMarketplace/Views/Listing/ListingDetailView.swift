@@ -18,128 +18,133 @@ struct ListingDetailView: View {
     private var isOwnListing: Bool { currentUserID == listing.sellerID }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                TabView(selection: $currentImageIndex) {
-                    if listing.imageURLs.isEmpty {
-                        Rectangle()
-                            .fill(Color.carolinaFog)
-                            .overlay {
-                                Image(systemName: "photo")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(Color.carolinaMuted)
-                            }
-                            .tag(0)
-                    } else {
-                        ForEach(Array(listing.imageURLs.enumerated()), id: \.offset) { index, url in
-                            CachedImageView(url: url)
-                                .tag(index)
-                        }
-                    }
-                }
-                .frame(height: 300)
-                .tabViewStyle(.page(indexDisplayMode: .automatic))
-                .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-                .padding(.horizontal, 20)
-
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack(alignment: .top) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("LISTING DETAILS")
-                                .font(.system(.caption, design: .rounded).weight(.bold))
-                                .tracking(2)
-                                .foregroundStyle(Color.carolinaMuted)
-
-                            Text(listing.title)
-                                .font(.system(.largeTitle, design: .serif).weight(.semibold))
-                                .foregroundStyle(Color.carolinaInk)
-
-                            HStack(spacing: 8) {
-                                ConditionBadge(condition: listing.condition)
-                                Text(listing.locationTag.displayName)
-                                    .font(.caption)
-                                    .foregroundStyle(Color.carolinaMuted)
-                            }
-                        }
-
-                        Spacer()
-
-                        VStack(alignment: .trailing, spacing: 4) {
-                            Text("$\(listing.price, specifier: "%.0f")")
-                                .font(.system(.title, design: .rounded).weight(.heavy))
-                                .foregroundStyle(Color.carolinaBlue)
-
-                            if listing.isSold {
-                                Text("SOLD")
-                                    .font(.caption.bold())
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 2)
-                                    .background(.red, in: Capsule())
-                            }
-                        }
-                    }
-
-                    Text(listing.description)
-                        .font(.body)
-                        .foregroundStyle(Color.carolinaMuted)
-                        .lineSpacing(4)
-
-                    HStack(spacing: 12) {
-                        if let imageURL = listing.sellerImageURL {
-                            CachedImageView(url: imageURL, size: 44)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                        } else {
-                            Image(systemName: "person.circle.fill")
-                                .font(.system(size: 44))
-                                .foregroundStyle(Color.carolinaMuted)
-                        }
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            HStack(spacing: 4) {
-                                Text(listing.sellerName)
-                                    .font(.subheadline.bold())
-                                VerifiedBadge()
-                            }
-
-                            if let seller = viewModel.sellerProfile {
-                                Text("\(seller.housingArea) · Class of \(seller.graduationYear)")
-                                    .font(.caption)
-                                    .foregroundStyle(Color.carolinaMuted)
-                            }
-
-                            if listing.sellerRating > 0 {
-                                HStack(spacing: 2) {
-                                    Image(systemName: "star.fill")
-                                        .font(.caption2)
-                                        .foregroundStyle(.orange)
-                                    Text(String(format: "%.1f", listing.sellerRating))
-                                        .font(.caption)
-                                        .foregroundStyle(Color.carolinaMuted)
+        ZStack {
+            BrandBackground()
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    // Image Gallery
+                    ZStack(alignment: .bottomTrailing) {
+                        TabView(selection: $currentImageIndex) {
+                            if listing.imageURLs.isEmpty {
+                                Rectangle()
+                                    .fill(Color.carolinaMist)
+                                    .overlay {
+                                        Image(systemName: "photo")
+                                            .font(.largeTitle)
+                                            .foregroundStyle(Color.carolinaMuted)
+                                    }
+                                    .tag(0)
+                            } else {
+                                ForEach(Array(listing.imageURLs.enumerated()), id: \.offset) { index, url in
+                                    CachedImageView(url: url)
+                                        .tag(index)
                                 }
                             }
                         }
-
-                        Spacer()
+                        .frame(height: UIScreen.main.bounds.height * 0.4)
+                        .tabViewStyle(.page(indexDisplayMode: .always))
+                        
+                        if listing.isSold {
+                            Text("CLOSED / SOLD")
+                                .font(.system(size: 9, weight: .bold))
+                                .tracking(1)
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
+                                .background(Color.carolinaNavy, in: RoundedRectangle(cornerRadius: 6))
+                                .padding(16)
+                        }
                     }
-                    .padding()
-                    .background(Color.carolinaFog, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                    .padding(.horizontal, 10)
+                    .padding(.top, 6)
 
-                    HStack(spacing: 20) {
-                        Label("\(listing.viewCount) views", systemImage: "eye")
-                        Label("\(listing.savedCount) saved", systemImage: "heart")
-                        Label(listing.createdAt.timeAgoDisplay, systemImage: "clock")
+                    // Details Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack(spacing: 6) {
+                                    Text(listing.condition.displayName.uppercased())
+                                        .font(.system(size: 8, weight: .bold))
+                                        .tracking(0.8)
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 3)
+                                        .background(Color.white, in: RoundedRectangle(cornerRadius: 4))
+                                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.carolinaStroke, lineWidth: 0.5))
+                                    
+                                    Text(listing.locationTag.displayName.uppercased())
+                                        .font(.system(size: 8, weight: .bold))
+                                        .tracking(0.8)
+                                        .foregroundStyle(Color.carolinaMuted)
+                                }
+
+                                Text(listing.title)
+                                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                                    .foregroundStyle(Color.carolinaNavy)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            Spacer()
+
+                            Text("$\(Int(listing.price))")
+                                .font(.system(size: 24, weight: .bold, design: .rounded))
+                                .foregroundStyle(Color.carolinaNavy)
+                        }
+
+                        Text(listing.description)
+                            .font(.subheadline)
+                            .foregroundStyle(Color.carolinaMuted)
+                            .lineSpacing(4)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        // Seller Card
+                        HStack(spacing: 12) {
+                            if let imageURL = listing.sellerImageURL {
+                                CachedImageView(url: imageURL, size: 48)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                            } else {
+                                Circle()
+                                    .fill(Color.carolinaMist)
+                                    .frame(width: 48, height: 48)
+                                    .overlay(Image(systemName: "person.fill").foregroundStyle(Color.carolinaBlue))
+                            }
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                HStack(spacing: 4) {
+                                    Text(listing.sellerName)
+                                        .font(.system(size: 14, weight: .bold))
+                                    VerifiedBadge(size: 12)
+                                }
+
+                                if let seller = viewModel.sellerProfile {
+                                    Text("Class of \(String(seller.graduationYear))")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundStyle(Color.carolinaMuted)
+                                        .textCase(.uppercase)
+                                        .tracking(0.5)
+                                }
+                            }
+                            Spacer()
+                        }
+                        .padding(16)
+                        .background(Color.white, in: RoundedRectangle(cornerRadius: 20))
+                        .shadow(color: Color.black.opacity(0.03), radius: 10, y: 5)
+
+                        HStack(spacing: 24) {
+                            statLabel(listing.viewCount, label: "Interactions")
+                            statLabel(listing.savedCount, label: "Interested")
+                            statLabel(listing.createdAt.timeAgoDisplay, label: "Listed")
+                        }
+                        .padding(.top, 10)
                     }
-                    .font(.caption)
-                    .foregroundStyle(Color.carolinaMuted)
+                    .padding(28)
+                    .brandPanel(radius: 32)
+                    .padding(.horizontal, 16)
                 }
-                .padding(20)
-                .brandPanel(radius: 30)
-                .padding(.horizontal, 20)
+                .padding(.bottom, 100)
             }
-            .padding(.top, 16)
-            .padding(.bottom, 28)
         }
         .brandScreenBackground()
         .navigationBarTitleDisplayMode(.inline)
@@ -150,7 +155,7 @@ struct ListingDetailView: View {
                     Task { await viewModel.toggleSaved(userID: uid) }
                 } label: {
                     Image(systemName: viewModel.isSaved ? "heart.fill" : "heart")
-                        .foregroundStyle(viewModel.isSaved ? .red : .secondary)
+                        .foregroundStyle(viewModel.isSaved ? .red : Color.carolinaNavy)
                 }
             }
         }
@@ -174,11 +179,23 @@ struct ListingDetailView: View {
         }
     }
 
+    private func statLabel(_ value: Any, label: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("\(value)")
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.carolinaNavy)
+            Text(label.uppercased())
+                .font(.system(size: 8, weight: .bold))
+                .tracking(1)
+                .foregroundStyle(Color.carolinaMuted)
+        }
+    }
+
     @ViewBuilder
     private var bottomBar: some View {
-        VStack {
-            Divider()
-            HStack(spacing: 12) {
+        VStack(spacing: 0) {
+            Divider().opacity(0.5)
+            HStack(spacing: 16) {
                 if isOwnListing {
                     Button {
                         showMarkSoldConfirmation = true
@@ -187,33 +204,35 @@ struct ListingDetailView: View {
                             .font(.headline)
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.carolinaBlue, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                            .padding(.vertical, 18)
+                            .background(Color.carolinaNavy, in: RoundedRectangle(cornerRadius: 20))
+                            .shadow(color: Color.carolinaNavy.opacity(0.15), radius: 10, y: 5)
                     }
                 } else {
                     Button {
                         Task { await startChat() }
                     } label: {
-                        HStack {
+                        HStack(spacing: 12) {
                             if isStartingChat {
-                                ProgressView()
-                                    .tint(.white)
+                                ProgressView().tint(.white)
                             }
-                            Text(isStartingChat ? "Opening Chat..." : "Message Seller")
+                            Text("Inquire with Seller")
+                                .font(.system(size: 16, weight: .bold))
                         }
-                        .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.carolinaBlue, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        .padding(.vertical, 18)
+                        .background(Color.carolinaNavy, in: RoundedRectangle(cornerRadius: 20))
+                        .shadow(color: Color.carolinaNavy.opacity(0.15), radius: 10, y: 5)
                     }
                     .disabled(isStartingChat)
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 10)
+            .padding(.horizontal, 24)
+            .padding(.top, 16)
+            .padding(.bottom, 34)
+            .background(.ultraThinMaterial)
         }
-        .background(.ultraThinMaterial)
     }
 
     private func startChat() async {

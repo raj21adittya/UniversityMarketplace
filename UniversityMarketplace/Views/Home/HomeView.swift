@@ -17,61 +17,92 @@ struct HomeView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 18) {
-                    Text("CAROLINA MARKETPLACE")
-                        .font(.system(.caption, design: .rounded).weight(.bold))
-                        .tracking(2.2)
-                        .foregroundStyle(Color.carolinaMuted)
-
-                    Text("Buy, sell, and discover campus finds in UNC blue style.")
-                        .font(.system(.largeTitle, design: .serif).weight(.semibold))
-                        .foregroundStyle(Color.carolinaInk)
-                        .lineSpacing(2)
-
-                    Text("Browse recent student listings with a cleaner, more polished marketplace feel.")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.carolinaMuted)
-
-                    HStack(spacing: 12) {
-                        statPill(value: "\(filteredListings.count)", label: "live")
-                        statPill(value: viewModel.selectedCategory == nil ? "All" : "1", label: "focus", filled: true)
-                        statPill(value: "UNC", label: "campus", navy: true)
+            VStack(spacing: 0) {
+                // Hero Section
+                ZStack(alignment: .bottomLeading) {
+                    AsyncImage(url: URL(string: "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&q=80&w=1000")) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 280)
+                            .clipped()
+                    } placeholder: {
+                        Color.carolinaMist.frame(height: 280)
                     }
-                }
-                .padding(20)
-                .brandPanel(radius: 30)
-                .padding(.horizontal, 20)
-
-                CategoryRowView(selectedCategory: viewModel.selectedCategory) { category in
-                    Task { await viewModel.selectCategory(category) }
-                }
-
-                if viewModel.isLoading && filteredListings.isEmpty {
-                    ProgressView()
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 60)
-                } else if filteredListings.isEmpty {
-                    EmptyStateView(
-                        icon: "cart",
-                        title: "No Listings Yet",
-                        message: "Be the first to post something for sale!"
+                    
+                    LinearGradient(
+                        colors: [Color.backgroundPrimary.opacity(0.95), Color.backgroundPrimary.opacity(0.4), .clear],
+                        startPoint: .bottom,
+                        endPoint: .top
                     )
-                    .padding(.top, 40)
-                } else {
-                    LazyVGrid(columns: columns, spacing: 12) {
-                        ForEach(filteredListings) { listing in
-                            NavigationLink(value: listing) {
-                                ListingCardView(listing: listing)
+                    .frame(height: 120)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 6) {
+                            Circle().fill(Color.carolinaBlue).frame(width: 5, height: 5)
+                            Text("UNC CAMPUS EXCLUSIVE")
+                                .font(.system(size: 8, weight: .bold))
+                                .tracking(1.2)
+                                .foregroundStyle(Color.carolinaNavy)
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.white.opacity(0.85))
+                        .clipShape(Capsule())
+
+                        Text("Better living, \nshared on campus.")
+                            .font(.system(size: 26, weight: .bold, design: .rounded))
+                            .foregroundStyle(Color.carolinaNavy)
+                            .lineSpacing(-1)
+                    }
+                    .padding(20)
+                }
+
+                VStack(spacing: 24) {
+                    CategoryRowView(selectedCategory: viewModel.selectedCategory) { category in
+                        Task { await viewModel.selectCategory(category) }
+                    }
+                    .padding(.top, 8)
+
+                    if viewModel.isLoading && filteredListings.isEmpty {
+                        ProgressView()
+                            .padding(.top, 40)
+                    } else if filteredListings.isEmpty {
+                        EmptyStateView(
+                            icon: "cart",
+                            title: "Recent Discoveries",
+                            message: "No items found in this category yet."
+                        )
+                        .padding(.top, 20)
+                    } else {
+                        VStack(alignment: .leading, spacing: 16) {
+                            HStack {
+                                Text(viewModel.selectedCategory == nil ? "Recent Discoveries" : "Results")
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .foregroundStyle(Color.carolinaNavy)
+                                
+                                Spacer()
+                                
+                                Text("\(filteredListings.count) items")
+                                    .font(.caption.bold())
+                                    .foregroundStyle(Color.carolinaMuted)
                             }
-                            .buttonStyle(.plain)
+                            .padding(.horizontal, 24)
+
+                            LazyVGrid(columns: columns, spacing: 16) {
+                                ForEach(filteredListings) { listing in
+                                    NavigationLink(value: listing) {
+                                        ListingCardView(listing: listing)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal, 20)
                         }
                     }
-                    .padding(.horizontal)
                 }
+                .padding(.bottom, 40)
             }
-            .padding(.top, 16)
-            .padding(.bottom, 28)
         }
         .brandScreenBackground()
         .navigationTitle("Marketplace")

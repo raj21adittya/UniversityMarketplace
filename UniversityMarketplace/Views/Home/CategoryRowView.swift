@@ -39,24 +39,21 @@ struct CategoryChip: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 6) {
-                Image(systemName: icon)
-                    .font(.caption.weight(.semibold))
-                Text(title)
-                    .font(.system(.caption, design: .rounded).weight(.bold))
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
-            .background(
-                isSelected ? Color.carolinaBlue : Color.white.opacity(0.82),
-                in: Capsule()
-            )
-            .overlay(
-                Capsule()
-                    .stroke(isSelected ? Color.clear : Color.carolinaStroke.opacity(0.95), lineWidth: 1)
-            )
-            .shadow(color: isSelected ? Color.carolinaBlue.opacity(0.18) : Color.clear, radius: 10, y: 6)
-            .foregroundStyle(isSelected ? .white : Color.carolinaMuted)
+            Text(title.uppercased())
+                .font(.system(size: 10, weight: .bold))
+                .tracking(1.2)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 10)
+                .background(
+                    isSelected ? Color.carolinaNavy : Color.clear,
+                    in: Capsule()
+                )
+                .overlay(
+                    Capsule()
+                        .stroke(isSelected ? Color.clear : Color.carolinaStroke, lineWidth: 1)
+                )
+                .foregroundStyle(isSelected ? .white : Color.carolinaMuted)
+                .shadow(color: isSelected ? Color.carolinaNavy.opacity(0.1) : Color.clear, radius: 8, y: 4)
         }
     }
 }
